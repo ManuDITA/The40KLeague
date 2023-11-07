@@ -1,0 +1,13 @@
+{
+    "scripts": {
+        "start": "npm-run-all --parallel start-frontend start-backend",
+        "start-frontend": "cd The40KLeague-frontend && npm run dev",
+        "start-backend": "cd The40KLeague-backend && node app.ts"
+    },
+    "devDependencies": {
+        "npm-run-all": "^4.1.5"
+    },
+    "dependencies": {
+        "amplify": "^0.0.11"
+    }
+}
