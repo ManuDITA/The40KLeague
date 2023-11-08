@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/seasons/{seasonID}": {
+      "name": "/seasons/{seasonID}",
+      "lambdaFunction": "the40kleagueSeasons",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}

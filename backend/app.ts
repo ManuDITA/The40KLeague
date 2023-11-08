@@ -17,6 +17,14 @@ app.get('/nes1-session3', (req, res) => {
     res.send(json.sessions[2])
 })
 
+app.get('/nes1-session4', (req, res) => {
+    res.send(json.sessions[3])
+})
+
+app.get('/getnes1', (req, res) => {
+    res.send(json.sessions)
+})
+
 
 
 app.get('/getSessions', (req, res) => {

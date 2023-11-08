@@ -9,6 +9,6 @@ export  class Session {
     players: any[];
     matches: any[];
     sessionTime: any;
-
-
+    sessionStartDate: Date;
+    sessionEndDate: Date;
 }

@@ -5,21 +5,21 @@
             "sessionImage": "nes1-session1-banner.avif",
             "isSessionOngoing": false,
             "sessionPrefix": "NES1",
-            "sessionPostfix": "SESSION1"
+            "sessionPostfix": "session1"
         },
         {
             "sessionName": "La Forge des Âmes Perdues",
             "sessionImage": "nes1-session2-banner.avif",
             "isSessionOngoing": false,
             "sessionPrefix": "NES1",
-            "sessionPostfix": "SESSION2"
+            "sessionPostfix": "session2"
         },
         {
             "sessionName": "La guerre des labyrinthes",
             "sessionImage": "nes1-session3-banner.avif",
             "isSessionOngoing": true,
             "sessionPrefix": "NES1",
-            "sessionPostfix": "SESSION3",
+            "sessionPostfix": "session3",
             "players": [
                 {
                     "Rank": "1",
@@ -166,6 +166,13 @@
                     "last3games": "2"
                 }
             ]
+        },
+        {
+            "sessionName": "La guerre des labyrinthes",
+            "sessionImage": "nes1-session1-banner.avif",
+            "isSessionOngoing": true,
+            "sessionPrefix": "NES1",
+            "sessionPostfix": "session4"
         }
     ]
 }
