@@ -8,7 +8,7 @@
       "SourceDir": "src",
       "DistributionDir": "build",
       "BuildCommand": "npm.cmd run-script build",
-      "StartCommand": "npm.cmd run dev"
+      "StartCommand": " npm.cmd run-script awsStart"
     }
   },
   "providers": [

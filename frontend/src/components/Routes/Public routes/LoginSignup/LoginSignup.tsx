@@ -1,12 +1,14 @@
 import React, { FC } from 'react';
 
 
-interface LoginSignupProps {}
+interface LoginSignupProps { }
 
 const LoginSignup: FC<LoginSignupProps> = () => (
-  <div>
-    LoginSignup Component
+
+  <div>ASD
   </div>
 );
+
+
 
 export default LoginSignup;

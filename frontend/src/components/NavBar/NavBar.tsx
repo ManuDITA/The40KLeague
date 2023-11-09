@@ -1,12 +1,13 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'
+import pageLogo from '/logo.avif'
 
 
 interface NavBarProps { }
 
 const NavBar: FC<NavBarProps> = () => {
 
-  const [availableSessions, setAvailableSessions] = useState(['AS', 'BS']);
+  const [availableSessions, setAvailableSessions] = useState(['/seasons/nes1/session1', '/seasons/nes1/session2']);
 
   useEffect(() => {
 
@@ -26,7 +27,7 @@ const NavBar: FC<NavBarProps> = () => {
     <div className="topnav">
       <div className="left-block">
         <Link to="/">
-          <img src="/src/assets/logo.avif" alt="Logo" className="logo"></img>
+          <img src={pageLogo} alt="Logo" className="logo"></img>
         </Link>
       </div>
       <div className="right-block">
@@ -34,7 +35,7 @@ const NavBar: FC<NavBarProps> = () => {
           <button className="dropbtn">NES1</button>
           <div className="dropdown-content">
             {availableSessions.map((session, index) => {
-              return <Link to={session}>NES session-{index + 1}</Link>
+              return <Link to={session}>NES1 session-{index + 1}</Link>
             })}
           </div>
         </div>

@@ -1,0 +1,185 @@
+{
+    "seasons": [{
+        "sessions": [
+            {
+                "sessionName": "L'Éveil des Anciens",
+                "sessionImage": "nes1-session1-banner.avif",
+                "isSessionOngoing": false,
+                "sessionPrefix": "nes1",
+                "sessionPostfix": "session1"
+            },
+            {
+                "sessionName": "La Forge des Âmes Perdues",
+                "sessionImage": "nes1-session2-banner.avif",
+                "isSessionOngoing": false,
+                "sessionPrefix": "nes1",
+                "sessionPostfix": "session2"
+            },
+            {
+                "sessionName": "La guerre des labyrinthes",
+                "sessionImage": "nes1-session3-banner.avif",
+                "isSessionOngoing": true,
+                "sessionPrefix": "nes1",
+                "sessionPostfix": "session3",
+                "playerCount": 18,
+                "players": [
+                    {
+                        "Rank": "1",
+                        "Nickname": "Tarkhan",
+                        "Faction": "GSC",
+                        "smp": "0/3",
+                        "ptl": "10",
+                        "last3games": "27"
+                    },
+                    {
+                        "Rank": "2",
+                        "Nickname": "Almety",
+                        "Faction": "TAU",
+                        "smp": "3/3",
+                        "ptl": "10",
+                        "last3games": "26"
+                    },
+                    {
+                        "Rank": "3",
+                        "Nickname": "Troll",
+                        "Faction": "TS",
+                        "smp": "3/3",
+                        "ptl": "10",
+                        "last3games": "25"
+                    },
+                    {
+                        "Rank": "4",
+                        "Nickname": "El_Bardou",
+                        "Faction": "GK",
+                        "smp": "3/3",
+                        "ptl": "10",
+                        "last3games": "21"
+                    },
+                    {
+                        "Rank": "5",
+                        "Nickname": "Danks",
+                        "Faction": "ELD",
+                        "smp": "3/3",
+                        "ptl": "10",
+                        "last3games": "21"
+                    },
+                    {
+                        "Rank": "6",
+                        "Nickname": "Kaizoku",
+                        "Faction": "CSM",
+                        "smp": "3/3",
+                        "ptl": "10",
+                        "last3games": "21"
+                    },
+                    {
+                        "Rank": "7",
+                        "Nickname": "Judicar",
+                        "Faction": "GK",
+                        "smp": "0/3",
+                        "ptl": "10",
+                        "last3games": "21"
+                    },
+                    {
+                        "Rank": "8",
+                        "Nickname": "PaDboL",
+                        "Faction": "SM",
+                        "smp": "3/3",
+                        "ptl": "10",
+                        "last3games": "20"
+                    },
+                    {
+                        "Rank": "9",
+                        "Nickname": "Ritalbringer",
+                        "Faction": "CD",
+                        "smp": "3/3",
+                        "ptl": "10",
+                        "last3games": "18"
+                    },
+                    {
+                        "Rank": "10",
+                        "Nickname": "PatPaintsMinis",
+                        "Faction": "GK",
+                        "smp": "3/3",
+                        "ptl": "10",
+                        "last3games": "16"
+                    },
+                    {
+                        "Rank": "11",
+                        "Nickname": "Xristo",
+                        "Faction": "AE",
+                        "smp": "3/3",
+                        "ptl": "10",
+                        "last3games": "15"
+                    },
+                    {
+                        "Rank": "12",
+                        "Nickname": "Spartan117",
+                        "Faction": "AE",
+                        "smp": "0/3",
+                        "ptl": "10",
+                        "last3games": "12"
+                    },
+                    {
+                        "Rank": "13",
+                        "Nickname": "Guillaume",
+                        "Faction": "BA",
+                        "smp": "0/3",
+                        "ptl": "10",
+                        "last3games": "10"
+                    },
+                    {
+                        "Rank": "14",
+                        "Nickname": "Nicolas",
+                        "Faction": "TS",
+                        "smp": "3/3",
+                        "ptl": "10",
+                        "last3games": "10"
+                    },
+                    {
+                        "Rank": "15",
+                        "Nickname": "Azag",
+                        "Faction": "TYR",
+                        "smp": "3/3",
+                        "ptl": "10",
+                        "last3games": "7"
+                    },
+                    {
+                        "Rank": "16",
+                        "Nickname": "Mig",
+                        "Faction": "SM",
+                        "smp": "3/3",
+                        "ptl": "10",
+                        "last3games": "5"
+                    },
+                    {
+                        "Rank": "17",
+                        "Nickname": "Mael",
+                        "Faction": "TAU",
+                        "smp": "3/3",
+                        "ptl": "10",
+                        "last3games": "2"
+                    },
+                    {
+                        "Rank": "18",
+                        "Nickname": "NaimePas",
+                        "Faction": "GK",
+                        "smp": "3/3",
+                        "ptl": "10",
+                        "last3games": "2"
+                    }
+                ]
+            },
+            {
+                "sessionName": "La guerre des labyrinthes",
+                "sessionImage": "nes1-session1-banner.avif",
+                "isSessionOngoing": true,
+                "sessionPrefix": "nes1",
+                "sessionPostfix": "session4"
+            }
+        ],
+        "seasonName": "firstSeason",
+        "location": "neuchatel",
+        "seasonTag": "nes1"
+    }
+    ]
+}

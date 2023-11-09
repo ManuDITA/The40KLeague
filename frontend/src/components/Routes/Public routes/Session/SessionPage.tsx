@@ -52,7 +52,7 @@ const SessionPage: FC<SessionPageProps> = () => {
                 <div>{session?.sessionPrefix}{session?.sessionPostfix} - TERMINÉE</div>)}
             </div>
             <div className='sessionImageText'>
-              <img src={'src/assets/' + session?.sessionImage} className='sessionImage'></img>
+              <img src={`https://images-the40k-league.s3.eu-west-3.amazonaws.com/seasons/${session?.sessionPrefix}/${session?.sessionImage}`} className='sessionImage'></img>
               <div className='sessionName'> {session?.sessionName} </div>
             </div>
             <div className='boldBlue'>

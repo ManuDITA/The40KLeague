@@ -20,7 +20,7 @@ const Home: FC<HomeProps> = () => {
   return (
     <div>
       <div className='container'>
-        <img src='/src/assets/mountains.avif' className='mainImage' />
+        <img src='/mountains.avif' className='mainImage' />
         <div className="imageCenteredMainText">LA LEAGUE SUISSE DE WARHAMMER</div>
         <div className="imageCenteredSecondaryText">Conçue par un joueur pour tous les joueurs, 100 % indépendante.</div>
       </div>

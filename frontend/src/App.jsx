@@ -22,10 +22,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="/nes1" element={<Season />}></Route>
-          <Route path="/nes1-session1" element={<SessionPage />}></Route>
-          <Route path="/nes1-session2" element={<SessionPage />}></Route>
-          <Route path="/nes1-session3" element={<SessionPage />}></Route>
-          <Route path="/nes1-session4" element={<SessionPage />}></Route>
+          <Route path="/nes1-session/:id" element={<SessionPage />}></Route>
           <Route path="/contacts" element={<Contacts />}></Route>
           <Route path="/loginsignup" element={<LoginSignup />}></Route>
           <Route path="/*" element={<NotFound/>}></Route>
