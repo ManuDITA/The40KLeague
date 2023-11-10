@@ -16,19 +16,18 @@ function App() {
 
   return (
     <>
-      
-      <BrowserRouter>
-      <NavBar></NavBar>
+
+        <NavBar></NavBar>
         <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path='/season/:idSeason/sessions' element={<Season />}></Route>
           <Route path="/season/:idSeason/session/:idSessions" element={<SessionPage />}></Route>
           <Route path="/contacts" element={<Contacts />}></Route>
           <Route path="/loginsignup" element={<LoginSignup />}></Route>
-          <Route path="/*" element={<NotFound/>}></Route>
+          <Route path="/*" element={<NotFound />}></Route>
         </Routes>
-      </BrowserRouter>
-      <Footer></Footer>
+
+        <Footer></Footer>
     </>
   )
 }

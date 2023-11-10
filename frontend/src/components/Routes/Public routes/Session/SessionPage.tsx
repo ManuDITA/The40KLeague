@@ -20,8 +20,8 @@ const SessionPage: FC<SessionPageProps> = () => {
       .then((res) => (res.json())) // Parse the response as JSON
       .then((data) => {
         console.log(data); // Log the parsed JSON data
-        setIsPageLoaded(true)
         setSession(data); // Set the parsed data in your state or variable
+        setIsPageLoaded(true)
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -31,14 +31,14 @@ const SessionPage: FC<SessionPageProps> = () => {
 
   return (
     <>
-      {isPageLoaded === false ? (
+      {session == undefined ? (
         <div className='boldBlue'> LOADING</div>) : (
         <div>
           <div className='container'>
             <div className='boldBlue'>
               {session?.isSessionOngoing ? (
                 <>
-                  <span>{session?.sessionPrefix}{session?.sessionPostfix} - EN COURS</span>
+                  <span>{session?.seasonID}{session?.sessionID} - EN COURS</span>
                   <span className="video__icon">
                     <div className="circle--outer"></div>
                     <div className="circle--inner"></div>
@@ -46,10 +46,10 @@ const SessionPage: FC<SessionPageProps> = () => {
                 </>
 
               ) : (
-                <div>{session?.sessionPrefix}{session?.sessionPostfix} - TERMINÉE</div>)}
+                <div>{session?.seasonID}{session?.sessionID} - TERMINÉE</div>)}
             </div>
             <div className='sessionImageText'>
-              <img src={session.sessionImageLocation} className='sessionImage'></img>
+              <img src={session?.sessionImageLocation} className='sessionImage'></img>
               <div className='sessionName'> {session?.sessionName} </div>
             </div>
             <div className='boldBlue'>
@@ -74,16 +74,21 @@ const SessionPage: FC<SessionPageProps> = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {session.players!= undefined && session.players.map((player) =>
-                    <tr>
-                      <td>{player.Rank}</td>
-                      <td>{player.Nickname}</td>
-                      <td>{player.Faction}</td>
-                      <td>{player.smp}</td>
-                      <td>{player.ptl}</td>
-                      <td>{player.last3games}</td>
-                    </tr>
-
+                  {session?.playerRanking != undefined && session?.playerRanking.map((p, index) => {
+                    let player = p.split(",")
+                    console.log(player)
+                    return (
+                      <tr key={index}>
+                        <td>{player[0]}</td>
+                        <td>{player[1]}</td>
+                        <td>{player[2]}</td>
+                        <td>{player[3]}</td>
+                        <td>{player[4]}</td>
+                        <td>{player[5]}</td>
+                        <td>{player[6]}</td>
+                      </tr>
+                    )
+                  }
                   )}
 
                 </tbody>

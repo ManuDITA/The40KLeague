@@ -4,64 +4,125 @@ AWS.config.update({
     region: 'eu-west-3'
 });
 const dynamodb = new AWS.DynamoDB.DocumentClient();
-const dynamodbTableName = 'Session';
-const healthPath = '/health';
-const singleSessionPath = '/session';
-const sessionsPath = '/sessions';
+const dynamodbSessionTable = 'SessionsTable';
+const dynamodbSeasonTable = 'SeasonsTable';
+
+const sessionPathFromSeason = '/season/{seasonID}/session/{sessionID}'
+const sessionsPathFromSeason = '/season/{seasonID}/sessions';
+const singleSeasonPath = '/season/{seasonID}';
+const seasonsPath = '/seasons';
 
 
-exports.handler = async function (event) {
-    console.log('Request event: ', event);
+
+exports.handler = async function(event) {
     let response;
     switch (true) {
-        case event.httpMethod === 'GET' && event.path === healthPath:
-            response = buildResponse(200);
+
+        //Seasons
+        case event.httpMethod === 'GET' && event.path === seasonsPath:
+            response = await getSeasons();
             break;
-        case event.httpMethod === 'GET' && event.path === singleSessionPath:
-            response = await getSession(event.queryStringParameters.sessionId);
+
+        case event.httpMethod === 'GET' && event.resource === singleSeasonPath:
+            console.log("Entered in the single season case")
+            response = await getSeason(event.pathParameters.seasonID);
             break;
-        case event.httpMethod === 'GET' && event.path === sessionsPath:
-            response = await getSessions();
+
+        case event.httpMethod === 'GET' && event.resource === sessionsPathFromSeason:
+            response = await getSessionsFromSeason(event.pathParameters.seasonID);
             break;
-        case event.httpMethod === 'POST' && event.path === productPath:
-            response = await saveProduct(JSON.parse(event.body));
+
+        case event.httpMethod === 'GET' && event.resource === sessionPathFromSeason:
+            response = await getSessionInSeason(event.pathParameters.seasonID, event.pathParameters.sessionID);
             break;
-        case event.httpMethod === 'PATCH' && event.path === productPath:
-            const requestBody = JSON.parse(event.body);
-            response = await modifyProduct(requestBody.sessionId, requestBody.updateKey, requestBody.updateValue);
-            break;
-        case event.httpMethod === 'DELETE' && event.path === productPath:
-            response = await deleteProduct(JSON.parse(event.body).sessionId);
-            break;
+
         default:
-            response = buildResponse(404, '404 Not Found');
+            response = buildResponse(404, event);
     }
     return response;
 }
 
-async function getSession(sessionId) {
+async function getSeason(seasonID) {
     const params = {
-        TableName: dynamodbTableName,
+        TableName: dynamodbSeasonTable,
         Key: {
-            'sessionId': sessionId
+            'seasonID': seasonID
+        }
+    };
+
+    try {
+        const response = await dynamodb.get(params).promise();
+        if (response.Item) {
+            return buildResponse(200, response.Item);
+        }
+        else {
+            return buildResponse(404, 'Season not found');
         }
     }
-    return await dynamodb.get(params).promise().then((response) => {
-        return buildResponse(200, response.Item);
-    }, (error) => {
-        console.error('Do your custom error handling here. I am just gonna log it: ', error);
-    });
+    catch (error) {
+        console.error('Error:', error);
+        return buildResponse(500, 'Internal Server Error');
+    }
 }
 
-async function getSessions() {
+async function getSeasons() {
     const params = {
-        TableName: dynamodbTableName
+        TableName: dynamodbSeasonTable
     }
-    const allProducts = await scanDynamoRecords(params, []);
+    const allSeasons = await scanDynamoRecords(params, []);
     const body = {
-        products: allProducts
+        seasons: allSeasons
     }
     return buildResponse(200, body);
+}
+
+async function getSessionsFromSeason(seasonID) {
+    const params = {
+        TableName: dynamodbSessionTable,
+        KeyConditionExpression: 'seasonID = :seasonID',
+        ExpressionAttributeValues: {
+            ':seasonID': seasonID
+        }
+    };
+
+    try {
+        const response = await dynamodb.query(params).promise();
+        if (response.Items) {
+            return buildResponse(200, response.Items);
+        }
+        else {
+            return buildResponse(404, response);
+        }
+    }
+    catch (error) {
+        console.error('Error:', error);
+        return buildResponse(500, 'Internal Server Error');
+    }
+}
+
+async function getSessionInSeason(seasonID, sessionID) {
+    const params = {
+        TableName: dynamodbSessionTable,
+        KeyConditionExpression: 'seasonID = :seasonID AND sessionID = :sessionID',
+        ExpressionAttributeValues: {
+            ':seasonID': seasonID,
+            ':sessionID': sessionID,
+        }
+    };
+
+    try {
+        const response = await dynamodb.query(params).promise();
+        if (response.Items[0]) {
+            return buildResponse(200, response.Items[0]);
+        }
+        else {
+            return buildResponse(404, response);
+        }
+    }
+    catch (error) {
+        console.error('Error:', error);
+        return buildResponse(500, 'Internal Server Error');
+    }
 }
 
 async function scanDynamoRecords(scanParams, itemArray) {
@@ -73,14 +134,15 @@ async function scanDynamoRecords(scanParams, itemArray) {
             return await scanDynamoRecords(scanParams, itemArray);
         }
         return itemArray;
-    } catch (error) {
+    }
+    catch (error) {
         console.error('Do your custom error handling here. I am just gonna log it: ', error);
     }
 }
 
 async function saveProduct(requestBody) {
     const params = {
-        TableName: dynamodbTableName,
+        TableName: dynamodbSeasonTable,
         Item: requestBody
     }
     return await dynamodb.put(params).promise().then(() => {

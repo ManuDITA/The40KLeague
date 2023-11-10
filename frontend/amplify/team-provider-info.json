@@ -25,6 +25,12 @@
       "api": {
         "sessionsAPIAmplify": {},
         "seasonsAPIAmplify": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d21aufhld5xu2z",
+          "type": "manual"
+        }
       }
     }
   }
