@@ -1,22 +1,30 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-the40kleague-dev-24820-authRole",
-      "UnauthRoleArn": "arn:aws:iam::227769496848:role/amplify-the40kleague-dev-24820-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::227769496848:role/amplify-the40kleague-dev-24820-authRole",
+      "AuthRoleName": "amplify-the40kleague-dev-113757-authRole",
+      "UnauthRoleArn": "arn:aws:iam::227769496848:role/amplify-the40kleague-dev-113757-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::227769496848:role/amplify-the40kleague-dev-113757-authRole",
       "Region": "eu-west-3",
-      "DeploymentBucketName": "amplify-the40kleague-dev-24820-deployment",
-      "UnauthRoleName": "amplify-the40kleague-dev-24820-unauthRole",
-      "StackName": "amplify-the40kleague-dev-24820",
-      "StackId": "arn:aws:cloudformation:eu-west-3:227769496848:stack/amplify-the40kleague-dev-24820/114684e0-7ea2-11ee-ad3c-0e32613034bc",
-      "AmplifyAppId": "d3eupbv9nathh7"
+      "DeploymentBucketName": "amplify-the40kleague-dev-113757-deployment",
+      "UnauthRoleName": "amplify-the40kleague-dev-113757-unauthRole",
+      "StackName": "amplify-the40kleague-dev-113757",
+      "StackId": "arn:aws:cloudformation:eu-west-3:227769496848:stack/amplify-the40kleague-dev-113757/0dd83980-7eec-11ee-ac87-0ad1011d2434",
+      "AmplifyAppId": "d21aufhld5xu2z"
     },
     "categories": {
-      "hosting": {
-        "amplifyhosting": {
-          "appId": "d3eupbv9nathh7",
-          "type": "cicd"
+      "function": {
+        "sessionsLambdaAmplify": {
+          "deploymentBucketName": "amplify-the40kleague-dev-113757-deployment",
+          "s3Key": "amplify-builds/sessionsLambdaAmplify-4c6a776e73317a376265-build.zip"
+        },
+        "seasonsLambdaAmplify": {
+          "deploymentBucketName": "amplify-the40kleague-dev-113757-deployment",
+          "s3Key": "amplify-builds/seasonsLambdaAmplify-71462f7144455331412f-build.zip"
         }
+      },
+      "api": {
+        "sessionsAPIAmplify": {},
+        "seasonsAPIAmplify": {}
       }
     }
   }

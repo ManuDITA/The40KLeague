@@ -1,6 +1,11 @@
 
 export  class Session {
 
+    seasonID: string;
+    sessionID: string;
+    sessionImageLocation: string;
+
+    
     sessionName: string;
     sessionImage: string;
     sessionPrefix: string;

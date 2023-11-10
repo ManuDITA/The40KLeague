@@ -1,21 +1,22 @@
 import React, { FC, useEffect, useState } from 'react';
 import './session.css'
 import { Session } from '../../../../classes/Session';
+import { useParams } from 'react-router-dom';
 
 interface SessionPageProps { }
 
 const SessionPage: FC<SessionPageProps> = () => {
 
-
-  const url = window.location.pathname.split('/').pop();
+  const { idSeason, idSessions } = useParams<{ idSeason: string; idSessions: string }>();
+  const url = window.location.pathname;
   const [session, setSession] = useState(new Session());
-  const [sessionState, setSessionState] = useState('');
   const [isPageLoaded, setIsPageLoaded] = useState(false)
 
 
   useEffect(() => {
     // Function will retrigger on URL change
-    fetch(`http://localhost:3000${window.location.pathname}`)
+    console.log("change url", url)
+    fetch(`https://q6ut75iqab.execute-api.eu-west-3.amazonaws.com/dev${window.location.pathname}`)
       .then((res) => (res.json())) // Parse the response as JSON
       .then((data) => {
         console.log(data); // Log the parsed JSON data
@@ -26,11 +27,7 @@ const SessionPage: FC<SessionPageProps> = () => {
         console.error('Error:', error);
       });
 
-  }, [url]);
-
-  useEffect(() => {
-
-  }, [])
+  }, [idSeason, idSessions]);
 
   return (
     <>
@@ -52,7 +49,7 @@ const SessionPage: FC<SessionPageProps> = () => {
                 <div>{session?.sessionPrefix}{session?.sessionPostfix} - TERMINÉE</div>)}
             </div>
             <div className='sessionImageText'>
-              <img src={`https://images-the40k-league.s3.eu-west-3.amazonaws.com/seasons/${session?.sessionPrefix}/${session?.sessionImage}`} className='sessionImage'></img>
+              <img src={session.sessionImageLocation} className='sessionImage'></img>
               <div className='sessionName'> {session?.sessionName} </div>
             </div>
             <div className='boldBlue'>

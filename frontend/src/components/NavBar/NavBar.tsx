@@ -1,21 +1,22 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'
 import pageLogo from '/logo.avif'
+import { Session } from '../../classes/Session';
 
 
 interface NavBarProps { }
 
 const NavBar: FC<NavBarProps> = () => {
 
-  const [availableSessions, setAvailableSessions] = useState(['/seasons/nes1/session1', '/seasons/nes1/session2']);
+  const [fetchedSessions, setFetchedSessions] = useState(['']);
 
   useEffect(() => {
 
-    fetch(`http://localhost:3000/getSessions`)
+    fetch(`https://q6ut75iqab.execute-api.eu-west-3.amazonaws.com/dev/season/nes1/sessions`)
       .then((res) => res.json()) // Parse the response as JSON
       .then((data) => {
         console.log(data); // Log the parsed JSON data
-        setAvailableSessions([...data]); // Set the parsed data in your state or variable
+        setFetchedSessions(data); // Set the parsed data in your state or variable
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -32,10 +33,10 @@ const NavBar: FC<NavBarProps> = () => {
       </div>
       <div className="right-block">
         <div className="dropdown">
-          <button className="dropbtn">NES1</button>
+          <Link className="dropbtn" to={"/season/nes1/sessions"}>NES1</Link>
           <div className="dropdown-content">
-            {availableSessions.map((session, index) => {
-              return <Link to={session}>NES1 session-{index + 1}</Link>
+            {fetchedSessions.map((ses, index) => {
+              return <Link to={"season/" + ses?.seasonID + "/session/" + ses?.sessionID}>{ses?.seasonID} {ses?.sessionID}</Link>
             })}
           </div>
         </div>

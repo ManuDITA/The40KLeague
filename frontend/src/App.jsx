@@ -21,8 +21,8 @@ function App() {
       <NavBar></NavBar>
         <Routes>
           <Route path="/" element={<Home />}></Route>
-          <Route path="/nes1" element={<Season />}></Route>
-          <Route path="/nes1-session/:id" element={<SessionPage />}></Route>
+          <Route path='/season/:idSeason/sessions' element={<Season />}></Route>
+          <Route path="/season/:idSeason/session/:idSessions" element={<SessionPage />}></Route>
           <Route path="/contacts" element={<Contacts />}></Route>
           <Route path="/loginsignup" element={<LoginSignup />}></Route>
           <Route path="/*" element={<NotFound/>}></Route>

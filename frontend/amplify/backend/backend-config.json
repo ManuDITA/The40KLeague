@@ -1,25 +1,76 @@
 {
-  "hosting": {
-    "amplifyhosting": {
-      "lastPushTimeStamp": "2023-11-09T01:51:36.585Z",
-      "service": "amplifyhosting",
-      "type": "cicd"
+  "api": {
+    "seasonsAPIAmplify": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "seasonsLambdaAmplify"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    },
+    "sessionsAPIAmplify": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "sessionsLambdaAmplify"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
+  "function": {
+    "seasonsLambdaAmplify": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "sessionsLambdaAmplify": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
     }
   },
   "parameters": {
-    "AMPLIFY_hosting_amplifyhosting_appId": {
+    "AMPLIFY_function_seasonsLambdaAmplify_deploymentBucketName": {
       "usedBy": [
         {
-          "category": "hosting",
-          "resourceName": "amplifyhosting"
+          "category": "function",
+          "resourceName": "seasonsLambdaAmplify"
         }
       ]
     },
-    "AMPLIFY_hosting_amplifyhosting_type": {
+    "AMPLIFY_function_seasonsLambdaAmplify_s3Key": {
       "usedBy": [
         {
-          "category": "hosting",
-          "resourceName": "amplifyhosting"
+          "category": "function",
+          "resourceName": "seasonsLambdaAmplify"
+        }
+      ]
+    },
+    "AMPLIFY_function_sessionsLambdaAmplify_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "sessionsLambdaAmplify"
+        }
+      ]
+    },
+    "AMPLIFY_function_sessionsLambdaAmplify_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "sessionsLambdaAmplify"
         }
       ]
     }

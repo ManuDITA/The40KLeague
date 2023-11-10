@@ -1,7 +1,5 @@
 {
     "scripts": {
-        "build": "npm run build",
-        "awsStart": "npm start",
         "start": "npm-run-all --parallel start-frontend start-backend",
         "start-frontend": "cd frontend && npm run dev",
         "start-backend": "cd backend && node app.ts"
