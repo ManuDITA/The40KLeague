@@ -6,6 +6,8 @@
     flex-wrap: nowrap;
     justify-content: space-around;
     align-items: flex-end;
+    min-height: 10vh;
+    max-height: 20vh;
 }
 
 .column{

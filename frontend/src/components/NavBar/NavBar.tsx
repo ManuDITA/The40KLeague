@@ -1,21 +1,25 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'
 import pageLogo from '/logo.avif'
 import { Session } from '../../classes/Session';
+import { SeasonClass } from '../../classes/Season';
+import { UserContext } from '../../App';
 
+import { Auth } from 'aws-amplify';
 
 interface NavBarProps { }
 
 const NavBar: FC<NavBarProps> = () => {
 
-  const [fetchedSessions, setFetchedSessions] = useState(['']);
+
+  const { isUserAuthenticated, setIsUserAuthenticated, token, setToken } = useContext(UserContext);
+  const [fetchedSessions, setFetchedSessions] = useState([new SeasonClass]);
 
   useEffect(() => {
 
     fetch(`https://q6ut75iqab.execute-api.eu-west-3.amazonaws.com/dev/season/nes1/sessions`)
       .then((res) => res.json()) // Parse the response as JSON
       .then((data) => {
-        console.log(data); // Log the parsed JSON data
         setFetchedSessions(data); // Set the parsed data in your state or variable
       })
       .catch((error) => {
@@ -23,6 +27,12 @@ const NavBar: FC<NavBarProps> = () => {
       });
 
   }, [])
+
+  async function logout() {
+    let ses = await Auth.signOut()
+    setIsUserAuthenticated(false)
+
+  }
 
   return (
     <div className="topnav">
@@ -33,20 +43,11 @@ const NavBar: FC<NavBarProps> = () => {
       </div>
       <div className="right-block">
         <div className="dropdown">
-          <Link className="dropbtn" to={"/season/nes1/sessions"}>NES1</Link>
+          <Link to={'/season/nes1'}><button className="dropbtn">NES1</button></Link>
           <div className="dropdown-content">
             {fetchedSessions.map((ses, index) => {
-              return <Link to={"season/" + ses?.seasonID + "/session/" + ses?.sessionID}>{ses?.seasonID} {ses?.sessionID}</Link>
+              return <Link key={index} to={"season/" + ses?.seasonID + "/session/" + ses?.sessionID}>{ses?.seasonID} {ses?.sessionID}</Link>
             })}
-          </div>
-        </div>
-
-        <div className="dropdown">
-          <button className="dropbtn">Match</button>
-          <div className="dropdown-content">
-            <a href="#">NES1 session</a>
-            <a href="#">Link 2</a>
-            <a href="#">Link 3</a>
           </div>
         </div>
 
@@ -70,13 +71,17 @@ const NavBar: FC<NavBarProps> = () => {
         </div>
 
         <div className="dropdown">
-          <button href="/loginsignup" className="dropbtn">Register</button>
+          <Link to={'/dashboard'}><button className="dropbtn">User</button></Link>
         </div>
 
-
-        <div className="dropdown">
-          <button href="/loginsignup" className="dropbtn">Login</button>
-        </div>
+        {!isUserAuthenticated &&
+          <div className="dropdown">
+            <Link to={'/loginsignup'}><button className="dropbtn">Login/SignUp</button></Link>
+          </div>}
+        {isUserAuthenticated &&
+          <div className="dropdown">
+            <Link to={'/logout'}><button className="dropbtn" onClick={() => logout()}>Logout</button></Link>
+          </div>}
 
       </div>
     </div>

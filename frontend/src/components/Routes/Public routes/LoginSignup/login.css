@@ -1,0 +1,13 @@
+.center-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 80vh;
+}
+
+.boldBlue {
+    font-size: 48px;
+    font-family: 'Arial Black';
+    color: var(--custom-Blue);
+}

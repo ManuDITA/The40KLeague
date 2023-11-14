@@ -1,10 +1,5 @@
-.containerimages {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
+.seasonImage{
+    width: 20%;
 }
 
-.image{
-    height: 30%;
-}
+

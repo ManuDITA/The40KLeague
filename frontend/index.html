@@ -8,6 +8,15 @@
   <link rel="icon" type="image/x-icon" href="/public/vite.svg">
 </head>
 
+
+<script>
+  window.global = window;
+  window.process = {
+    env: { DEBUG: undefined },
+  }
+  var exports = {};
+</script>
+</body>
 <body>
   <div id="root"></div>
 </body>
