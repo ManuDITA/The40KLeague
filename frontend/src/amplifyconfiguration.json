@@ -1,0 +1,15 @@
+{
+  "aws_project_region": "eu-west-3",
+  "aws_cloud_logic_custom": [
+    {
+      "name": "sessionsAPIAmplify",
+      "endpoint": "https://9smznit8ya.execute-api.eu-west-3.amazonaws.com/dev",
+      "region": "eu-west-3"
+    },
+    {
+      "name": "seasonsAPIAmplify",
+      "endpoint": "https://dd1ocswnh6.execute-api.eu-west-3.amazonaws.com/dev",
+      "region": "eu-west-3"
+    }
+  ]
+}
