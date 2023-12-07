@@ -1,6 +1,5 @@
 const AWS = require('aws-sdk');
-const User = require('../../frontend/src/classes/UserClass'
-)
+
 
 AWS.config.update({
     region: 'eu-west-3'
@@ -42,7 +41,7 @@ async function getUser(nickname, cognitoUserID) {
 
     try {
         const response = await dynamodb.query(params).promise();
-        if (response.Items) {
+        if (response.Items.length > 0) {
             const sessionObject = await getCurrentActiveSession();
             const obj = {
                 user: response.Items[0],

@@ -28,7 +28,7 @@ function LoginSignup() {
   }, [])
 
   useEffect(() => {
-    console.log('change token' + token)
+    //console.log('change token' + token)
   }, [token])
 
   const getToken = async () => {
@@ -162,7 +162,7 @@ function LoginSignup() {
     }}
     >
       {({ signOut, user }) => {
-        console.log(user)
+        //console.log(user)
         setIsUserAuthenticated(true)
         return (
           <div>

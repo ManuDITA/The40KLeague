@@ -1,0 +1,14 @@
+Parameters:
+  Env:
+    Type: String
+    Default: dev
+
+  S3BucketName:
+    Type: String
+    Default: images-the40k-league
+  CognitoUserPoolName:
+    Type: String
+    Default: The40KLeagueUserPool
+  CognitoWebClientName:
+    Type: String
+    Default: The40Kleague

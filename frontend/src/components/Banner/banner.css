@@ -1,0 +1,159 @@
+.rectangle {
+
+  display: inline-block;
+  background-color: transparent;
+  border: 1cm solid transparent;
+  zoom: 50%;
+  -moz-transform: scale(0.5);
+}
+
+.innerRectangle {
+  
+  height: 8.36cm;
+  width: 20.44cm;
+  border-radius: 40px;
+  position: relative;
+  display: flex;
+  box-shadow: 3pt 3pt 4px rgba(0, 0, 0, 0.6);
+  background-color: white;
+}
+
+.matchType {
+  position: absolute;
+  left: 4%;
+  top: 3%;
+  color: #2E4555;
+  overflow: visible;
+  border-radius: 60px 0px 0px 0px;
+  width: 55%;
+  height: 15%;
+  font-family: Arial Black, Helvetica, sans-serif;
+  font-size: 30pt;
+  text-align: left;
+  vertical-align: middle;
+
+}
+
+.statusPlayed {
+
+  padding-top: 10px;
+  background-color: #2E4555;
+  color: white;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  overflow: hidden;
+  border-radius: 0px 40px 0px 0px;
+  width: 11.84cm;
+  height: 2.19cm;
+  font-family: Arial Black, Helvetica, sans-serif;
+  font-size: 32pt;
+  vertical-align: middle;
+  align-items: center;
+}
+
+.score {
+  
+  z-index: 0;
+  font-family: Arial Black, Helvetica, sans-serif;
+  color: #2E4555;
+  font-size: 80pt;
+  display: flex;
+  /* Use Flexbox for the centered element container */
+  justify-content: center;
+  /* Center the child elements horizontally */
+  align-items: center;
+  /* Center the child elements vertically */
+  /* Add any other styles you want for the centered element container */
+  flex: 1;
+}
+
+.player1Icon {
+  display: flex;
+  max-width: 40%;
+  max-height: 40%;
+  width: auto;
+  height: auto;
+
+  position: absolute;
+  left: 2%;
+  bottom: 30%;
+
+}
+
+.player2Icon {
+
+  display: inline;
+  max-width: 40%;
+  max-height: 40%;
+  width: auto;
+  height: auto;
+
+  position: absolute;
+  right: 2%;
+  bottom: 30%;
+
+}
+
+
+.iconBattle1 {
+  position: absolute;
+  left: 1%;
+  bottom: 5%;
+
+  height: 1.76cm;
+  width: 1.73cm;
+
+}
+
+.iconBattle2 {
+
+  height: 1.76cm;
+  width: 1.73cm;
+  position: absolute;
+  right: 1%;
+  bottom: 5%;
+}
+
+.player1 {
+
+  position: absolute;
+  font-family: Arial Black, Helvetica, sans-serif;
+  color: #C00000;
+  font-size: 30pt;
+  left: 10%;
+  bottom: 7%;
+}
+
+.player2 {
+
+  position: absolute;
+  font-family: Arial Black, Helvetica, sans-serif;
+  color: #536A60;
+  font-size: 30pt;
+  right: 10%;
+  bottom: 7%;
+}
+
+.utgIcon2{
+  opacity: 0.3;
+  rotate: -20deg;
+  position: absolute;
+  right: 10%;
+  top: 32%;
+
+  height: 180px;
+
+}
+
+.utgIcon1{
+  opacity: 0.3;
+  rotate: 20deg;
+  transform: scaleX(-1);
+  position: absolute;
+  left: 10%;
+  top: 32%;
+
+  height: 180px;
+
+}

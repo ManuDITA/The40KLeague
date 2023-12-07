@@ -2,4 +2,18 @@
     width: 20%;
 }
 
+.containerSessions {
+    display: flex;
+    justify-content: space-evenly;
+    background-color: rgba(207, 207, 207, 0.075);
+    color: rgb(167, 0, 0);
+    flex-direction: row;
+    
 
+}
+
+.seasonImage{
+    object-fit: cover;
+    width: 40vh;
+    height: 30vh;
+}

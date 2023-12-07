@@ -15,11 +15,11 @@ const SessionPage: FC<SessionPageProps> = () => {
 
   useEffect(() => {
     // Function will retrigger on URL change
-    console.log("change url", url)
+    console.log(url)
     fetch(`https://q6ut75iqab.execute-api.eu-west-3.amazonaws.com/dev${window.location.pathname}`)
       .then((res) => (res.json())) // Parse the response as JSON
       .then((data) => {
-        console.log(data); // Log the parsed JSON data
+        //console.log(data); // Log the parsed JSON data
         setSession(data); // Set the parsed data in your state or variable
         setIsPageLoaded(true)
       })
@@ -59,10 +59,15 @@ const SessionPage: FC<SessionPageProps> = () => {
             Last Update : 12h00 - 26/10/2023
           </div>
 
-          <img src="/session/pairings-image.avif" />
-          <img src="/session/allgames-image.avif" />
-          <img src="/session/sportmanship-image.avif" />
-
+          <Link to='/season/nes1'>
+            <img className='seasonImage' src="/session/pairings-image.avif" />
+          </Link>
+          <Link to='/season/nes1'>
+            <img className='seasonImage' src="/session/allgames-image.avif" />
+          </Link>
+          <Link to='/season/nes1'>
+            <img className='seasonImage' src="/session/sportmanship-image.avif" />
+          </Link>
           <Link to='/season/nes1'>
             <img className='seasonImage' src="/session/seasonranking-image.avif" />
           </Link>

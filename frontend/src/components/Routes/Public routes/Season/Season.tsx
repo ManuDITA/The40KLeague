@@ -42,10 +42,9 @@ const Season: FC<SeasonProps> = () => {
       <img src='/src/assets/nes1/nes1-map.avif'></img>
       <div>{seasonInfo?.seasonDescription}
       </div>
-      <div className="container">
-        {sessionList.map((ses: Session) =>
-          <div>
-            {ses?.seasonID} {ses.sessionID}
+      <div className="containerSessions">
+        {sessionList.map((ses: Session, index) =>
+          <div key={index} >
             <Link to={"/season/" + ses?.seasonID + "/session/" + ses?.sessionID}>
               <img className='seasonImage' src={ses.sessionImageLocation} />
             </Link>
