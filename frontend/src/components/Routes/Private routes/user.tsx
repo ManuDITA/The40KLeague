@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 
 import { UserContext } from "../../../App";
 import { Auth } from "aws-amplify";
-//import { UserClass } from "../../../classes/UserClass";
+import { UserClass } from "../../../../../classes/UserClass";
 
 import './privateRoutes.css'
 import { Session } from "../../../../../classes/Session";

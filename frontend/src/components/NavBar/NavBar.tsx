@@ -15,19 +15,6 @@ const NavBar: FC<NavBarProps> = () => {
   const { isUserAuthenticated, setIsUserAuthenticated, token, setToken } = useContext(UserContext);
   const [fetchedSessions, setFetchedSessions] = useState([]);
 
-  useEffect(() => {
-
-    fetch(`https://q6ut75iqab.execute-api.eu-west-3.amazonaws.com/dev/season/nes1/sessions`)
-      .then((res) => res.json()) // Parse the response as JSON
-      .then((data) => {
-        setFetchedSessions(data); // Set the parsed data in your state or variable
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-
-  }, [])
-
   async function logout() {
     let ses = await Auth.signOut()
     setIsUserAuthenticated(false)
@@ -51,6 +38,7 @@ const NavBar: FC<NavBarProps> = () => {
             <Link to={"tournament/" + "nes1"  + "/" + 'session1'}>session1</Link>
             <Link to={"tournament/" + "nes1"  + "/" + 'session2'}>session2</Link>
             <Link to={"tournament/" + "nes1"  + "/" + 'session3'}>session3</Link>
+            <Link to={"tournament/" + "nes1"  + "/" + 'session4'}>session4</Link>
           </div>
         </div>
 

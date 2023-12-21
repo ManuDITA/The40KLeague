@@ -27,7 +27,27 @@ const Tournament: FC<TournamentProps> = () => {
         setTournamentInfo(data.tournament[0]);
         setPlayerSubscriptions(data.playerSubscriptions); // Set player subscriptions here
       });
+
+      getSessionsInTournament('nes1')
   }, []);
+
+  function getSessionsInTournament(tournamentID: string) {
+    console.log(apiPaths.tournamentsAPIEndpoint + apiPaths.getSessionsInTournament + `?tournamentID=${tournamentID}`)
+    fetch(apiPaths.tournamentsAPIEndpoint + apiPaths.getSessionsInTournament + `?tournamentID=${tournamentID}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log(data);
+        // Process the data as needed
+      })
+      .catch(error => {
+        console.error("Error fetching sessions:", error);
+      });
+  }
 
   return (
     <div>
@@ -63,36 +83,6 @@ const Tournament: FC<TournamentProps> = () => {
                 <td>{player.player_points}</td>
               </tr>
             ))}
-          </tbody>
-        </table>
-      </div>
-
-      <div className='boldBlue'>SEASON CLASSEMENT</div>
-      <div className='myTableContainer'>
-        <table>
-          <thead>
-            <tr className='tableRow'>
-              <th>RANK</th>
-              <th>NICKNAME</th>
-              <th>FACTION</th>
-              <th>PLAYED</th>
-              <th>PLT</th>
-              <th>SCORE</th>
-            </tr>
-          </thead>
-          <tbody>
-            {tournamentInfo?.seasonRanking != undefined && tournamentInfo?.seasonRanking.map((p, index) => {
-              return (
-                <tr key={index}>
-                  <td>{p.RANK}</td>
-                  <td>{p.NICKNAME}</td>
-                  <td>{p.FACTION}</td>
-                  <td>{p.PLAYED}</td>
-                  <td>{p.PLT}</td>
-                  <td>{p.SCORE}</td>
-                </tr>
-              );
-            })}
           </tbody>
         </table>
       </div>
