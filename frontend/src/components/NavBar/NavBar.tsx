@@ -1,8 +1,8 @@
 import React, { FC, useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'
 import pageLogo from '/logo.avif'
-import { Session } from '../../classes/Session';
-import { SeasonClass } from '../../classes/Season';
+import { Session } from '../../../../classes/Session';
+import { TournamentClass } from '../../../../classes/TournamentClass';
 import { UserContext } from '../../App';
 
 import { Auth } from 'aws-amplify';
@@ -13,7 +13,7 @@ const NavBar: FC<NavBarProps> = () => {
 
 
   const { isUserAuthenticated, setIsUserAuthenticated, token, setToken } = useContext(UserContext);
-  const [fetchedSessions, setFetchedSessions] = useState([new SeasonClass]);
+  const [fetchedSessions, setFetchedSessions] = useState([]);
 
   useEffect(() => {
 
@@ -43,11 +43,14 @@ const NavBar: FC<NavBarProps> = () => {
       </div>
       <div className="right-block">
         <div className="dropdown">
-          <Link to={'/season/nes1'}><button className="dropbtn">NES1</button></Link>
+          <Link to={'/tournament/nes1'}><button className="dropbtn">NES1</button></Link>
           <div className="dropdown-content">
-            {fetchedSessions.map((ses, index) => {
-              return <Link key={index} to={"season/" + ses?.seasonID + "/session/" + ses?.sessionID}>{ses?.seasonID} {ses?.sessionID}</Link>
-            })}
+            {
+              //return <Link key={index} to={"tournament/" + "nes1"  + "/" + ses?.sessionID}>{ses?.seasonID} {ses?.sessionID}</Link>
+            }
+            <Link to={"tournament/" + "nes1"  + "/" + 'session1'}>session1</Link>
+            <Link to={"tournament/" + "nes1"  + "/" + 'session2'}>session2</Link>
+            <Link to={"tournament/" + "nes1"  + "/" + 'session3'}>session3</Link>
           </div>
         </div>
 

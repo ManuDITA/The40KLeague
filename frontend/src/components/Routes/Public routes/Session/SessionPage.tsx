@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import './session.css'
-import { Session } from '../../../../classes/Session';
+import { Session } from '../../../../../../classes/Session';
 import { Link, useParams } from 'react-router-dom';
 
 interface SessionPageProps { }

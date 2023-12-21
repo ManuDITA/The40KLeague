@@ -10,13 +10,14 @@ import Contacts from './components/Routes/Public routes/Contacts/Contacts'
 import SessionPage from './components/Routes/Public routes/Session/SessionPage'
 import LoginSignup from './components/Routes/Public routes/LoginSignup/LoginSignup'
 import NotFound from './components/Routes/Public routes/NotFound/NotFound'
-import Season from './components/Routes/Public routes/Season/Season'
 import User from './components/Routes/Private routes/user'
 import React from 'react'
 import Logout from './components/Routes/Public routes/LoginSignup/Logout'
+import Tournament from './components/Routes/Public routes/Tournament/Tournament'
 
 import { Auth } from 'aws-amplify';
 import Profile from './components/Routes/Public routes/Profile/profile'
+import Tournaments from './components/Routes/Public routes/Tournament/Tournaments'
 
 
 export const UserContext = React.createContext();
@@ -50,14 +51,15 @@ function App() {
         <NavBar></NavBar>
         <Routes>
           <Route path="/" element={<Home />}></Route>
-          <Route path='/season/:idSeason' element={<Season />}></Route>
-          <Route path="/season/:idSeason/session/:idSessions" element={<SessionPage />}></Route>
+          <Route path='/tournaments' element={<Tournaments />}></Route>
+          <Route path='/tournament/:tournamentID' element={<Tournament />}></Route>
+          <Route path="/tournament/:tournamentID/:sessionID" element={<SessionPage />}></Route>
           <Route path="/contacts" element={<Contacts />}></Route>
           <Route path="/loginsignup" element={<LoginSignup />}></Route>
           <Route path="/logout" element={<Logout />}></Route>
           <Route path="/profile/:nickname" element={<Profile />}></Route>
-          {isUserAuthenticated &&
-            <Route path="/dashboard" element={<User />}></Route>}
+          {isUserAuthenticated && true}
+            //<Route path="/dashboard" element={<User />}></Route>
           <Route path="/*" element={<NotFound />}></Route>
         </Routes>
 

@@ -3,12 +3,12 @@ import React, { useContext, useEffect, useState } from "react";
 
 import { UserContext } from "../../../App";
 import { Auth } from "aws-amplify";
-import { UserClass } from "../../../classes/UserClass";
+//import { UserClass } from "../../../classes/UserClass";
 
 import './privateRoutes.css'
-import { Session } from "../../../classes/Session";
+import { Session } from "../../../../../classes/Session";
 import Banner from "../../Banner/Banner";
-import { Match } from "../../../classes/match";
+import { Match } from "../../../../../classes/match";
 
 const User = () => {
     const { isUserAuthenticated, setIsUserAuthenticated, token, setToken } = useContext(UserContext)
