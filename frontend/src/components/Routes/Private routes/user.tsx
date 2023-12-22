@@ -12,7 +12,7 @@ import { Match } from "../../../../../classes/match";
 
 const User = () => {
     const { isUserAuthenticated, setIsUserAuthenticated, token, setToken } = useContext(UserContext)
-    const [user, setUser] = useState(new UserClass);
+    const [user, setUser] = useState();
     const [matches, setMatches] = useState<Match[] | undefined>()
     const [loggedProfile, setLoggedProfile] = useState()
 
@@ -20,11 +20,12 @@ const User = () => {
 
 
     useEffect(() => {
-        //getUserInfo()
+        getUserInfo()
     }, [isUserAuthenticated])
 
     useEffect(() => {
-    }, [])
+        console.log('Logged user: ', user)
+    }, [user])
 
     useEffect(() => {
         if (loggedProfile != undefined) {
@@ -34,7 +35,8 @@ const User = () => {
     }, [loggedProfile])
 
     async function getUserInfo() {
-
+        setUser(await Auth.currentUserPoolUser());
+        /*
         console.log(Auth)
         const cognitoUserID = Auth.Credentials.Auth.user?.attributes?.sub;
         const nicknameForRequest = Auth.Credentials.Auth.user?.attributes?.nickname;
@@ -54,7 +56,7 @@ const User = () => {
                 getUserMatches(receivedSession, Auth.Credentials.Auth.user?.attributes.nickname)
                 setUser(output.user)
                 setLoggedProfile(Auth.Credentials.Auth.user?.attributes)
-            })
+            })*/
     }
 
     function getUserMatches(session, nickname) {
@@ -86,7 +88,7 @@ const User = () => {
         <div>
             <img src="/public/factions_backgrounds/Space Marines.jfif" className="userBackgroundImage"></img>
             <div className="boldWhite txtOverImage">
-                {user != undefined && <div>{user.nickname} - {user.army}</div>}
+                {user!= undefined && user.attributes.name} - {user!= undefined && user.username}
             </div>
 
             <div className="containerUser title boldBlue">

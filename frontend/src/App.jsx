@@ -18,10 +18,21 @@ import Tournament from './components/Routes/Public routes/Tournament/Tournament'
 import { Auth } from 'aws-amplify';
 import Profile from './components/Routes/Public routes/Profile/profile'
 import Tournaments from './components/Routes/Public routes/Tournament/Tournaments'
+import { Amplify } from 'aws-amplify'
+import awsExports from './aws-exports'
 
 
 export const UserContext = React.createContext();
 export const AuthContext = React.createContext();
+
+
+Amplify.configure({
+  Auth: {
+    region: awsExports.REGION,
+    userPoolId: awsExports.USER_POOL_ID,
+    userPoolWebClientId: awsExports.USER_POOL_CLIENT_ID,
+  },
+});
 
 function App() {
 

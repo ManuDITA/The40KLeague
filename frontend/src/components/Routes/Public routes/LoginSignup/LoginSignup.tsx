@@ -1,127 +1,122 @@
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import { Amplify } from 'aws-amplify';
-import { Authenticator } from '@aws-amplify/ui-react'
-import '@aws-amplify/ui-react/styles.css'
-import awsExports from '../../../../aws-exports'
-import { Auth } from 'aws-amplify'
+import awsExports from '../../../../aws-exports';
+import { Auth } from 'aws-amplify';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../../../App';
 
-Amplify.configure({
-  Auth: {
-    region: awsExports.REGION,
-    userPoolId: awsExports.USER_POOL_ID,
-    userPoolWebClientId: awsExports.USER_POOL_CLIENT_ID
-  }
-})
-
-function LoginSignup() {
-
+const LoginSignup: FC = () => {
   const navigate = useNavigate();
+  const { setIsUserAuthenticated, setToken } = useContext(UserContext);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone_number, setPhoneNumber] = useState('');
+  const [name, setName] = useState('');
+  const [birthdate, setBirthDate] = useState('');
+  const [confirmationCode, setConfirmationCode] = useState(''); // Added state for confirmation code
+  const [isUserConfirmed, setIsUserConfirmed] = useState(true);
 
-  const { isUserAuthenticated, setIsUserAuthenticated, token, setToken } = useContext(UserContext);
-  const [isSigningOut, setIsSigningOut] = useState(false);
-
-  useEffect(() => {
-    console.log('isUserAuthenticated (inside useEffect): ', isUserAuthenticated, 'isSigningOut:', isSigningOut);
-    if (isUserAuthenticated && !isSigningOut) {
-      console.log('user logged at the moment: getting the token');
-      getToken();
-    } else {
-      console.log('No user logged in at the moment');
+  const handleLogin = async () => {
+    try {
+      const user = await Auth.signIn(username, password);
+      console.log('User signed in:', user);
+      // Handle successful login (update context, navigate, etc.)
+      setIsUserAuthenticated(true);
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Error signing in:', error);
+      // Handle login error (show error message, etc.)
     }
-  }, [isUserAuthenticated, isSigningOut]);
-
-  const getToken = async () => {
-    console.log('getting token')
-    const session = await Auth.currentSession();
-    const receivedToken = session.getIdToken().getJwtToken();
-
-    console.log(session)
-    setToken(receivedToken)
-    navigate('/dashboard')
-  }
-
-  const customSignout = async () => {
-    console.log("Signing out");
-    setIsSigningOut(true); // Set a flag indicating sign-out process
-    await Auth.signOut();
-    setIsUserAuthenticated(false);
-    setToken("");
-    navigate('/');
-    setIsSigningOut(false); // Reset the flag after sign-out is complete
   };
 
+  const handleConfirmSignUp = async () => {
+    try {
+      await Auth.confirmSignUp(username, confirmationCode);
+      console.log('User confirmed');
+      //now we can add the user to the player database
+
+      handleLogin()
+    } catch (error) {
+      console.error('Error confirming sign up:', error);
+      // Handle confirmation error (show error message, etc.)
+    }
+  };
+
+  const handleSignUp = async () => {
+    try {
+      const user = await Auth.signUp({
+        username,
+        password,
+        attributes: {
+          email,
+          phone_number,
+          name, // Match with 'name' in your Cognito user pool
+          birthdate,  // Match with 'birthdate' in your Cognito user pool
+        },
+      });
+
+      console.log('User signed up:', user);
+      setIsUserConfirmed(false); // Set the state to false to show the confirmation code form
+    } catch (error) {
+      console.error('Error signing up:', error);
+      // Handle sign-up error (show error message, etc.)
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await Auth.signOut();
+      setIsUserAuthenticated(false);
+      setToken('');
+      navigate('/');
+    } catch (error) {
+      console.error('Error signing out:', error);
+      // Handle sign-out error (show error message, etc.)
+    }
+  };
 
   return (
-    <Authenticator components={{
-      SignUp: {
-        FormFields() {
-          return (
-            <>
-              <div><label>Username</label></div>
-              <input
-                type="text"
-                name="username"
-                placeholder="Please enter your username"
-              />
+    <div>
+      {/* Login Form */}
+      <h2>Login</h2>
+      <label>Username:</label>
+      <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+      <label>Password:</label>
+      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+      <button onClick={handleLogin}>Login</button>
 
-              <div><label>Name</label></div>
-              <input
-                type="text"
-                name="name"
-                placeholder="Please enter your name"
-              />
+      {/* Signup Form */}
+      <h2>Sign Up</h2>
+      <label>Username:</label>
+      <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+      <label>Password:</label>
+      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+      <label>Email:</label>
+      <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
+      <label>Phone Number:</label>
+      <input type="text" value={phone_number} onChange={(e) => setPhoneNumber(e.target.value)} />
+      <label>Name:</label>
+      <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+      <label>Date:</label>
+      <input type="date" value={birthdate} onChange={(e) => setBirthDate(e.target.value)} />
+      <button onClick={handleSignUp}>Sign Up</button>
 
-              <div><label>Email</label></div>
-              <input
-                type="text"
-                name="email"
-                placeholder="Please enter a valid email"
-              />
+      {/* Confirmation Code Form, only showable when user has been registered */}
+      {isUserConfirmed === false && (
+        <>
+          <h2>Confirm Sign Up</h2>
+          <label>Confirmation Code:</label>
+          <input type="text" value={confirmationCode} onChange={(e) => setConfirmationCode(e.target.value)} />
+          <button onClick={handleConfirmSignUp}>Confirm Sign Up</button>
+          <button onClick={() => Auth.resendSignUp(username)}>Resend Sign Up</button>
+        </>
+      )}
 
-              <div><label>Password</label></div>
-              <input
-                type="password"
-                name="password"
-                placeholder="Please enter your password"
-              />
-
-
-              <div><label>Phone number</label></div>
-              <input
-                type="text"
-                name="phone_number"
-                placeholder="Please enter a valid number"
-              />
-              <div><label>Birth date</label></div>
-              <input
-                type="date"
-                name="birthdate"
-                placeholder="Please enter a valid date"
-              />
-            </>
-          );
-        }
-      }
-    }}
-    >
-      {({ signOut, user }) => {
-        setIsUserAuthenticated(true)
-        return (
-          <div>
-            <button onClick={customSignout}>Sign out</button>
-
-            <div>{user?.username}</div>
-            <div>{token}</div>
-          </div>
-        )
-      }}
-    </Authenticator >
-  )
-}
-
-
-
+      {/* Logout Button */}
+      <button onClick={handleSignOut}>Sign Out</button>
+    </div>
+  );
+};
 
 export default LoginSignup;

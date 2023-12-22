@@ -5,7 +5,7 @@ export class UserClass {
     email: string;
     phisicalAddress: string;
     birthdate: string;
-    name:"Emanuele Simeone"
+    name: string;
     phoneNumber: string;
     army: string;
 }
