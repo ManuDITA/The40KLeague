@@ -35,6 +35,7 @@ function LoginSignup() {
     const session = await Auth.currentSession();
     const receivedToken = session.getIdToken().getJwtToken();
 
+    console.log(session)
     if (receivedToken != undefined) {
       setIsUserAuthenticated(true);
       setToken(receivedToken)
@@ -49,23 +50,11 @@ function LoginSignup() {
         FormFields() {
           return (
             <>
-              <div><label>Nickname</label></div>
-              <input
-                type="text"
-                name="nickname"
-                placeholder="Please enter your Nickname"
-              />
               <div><label>Username</label></div>
               <input
                 type="text"
                 name="username"
                 placeholder="Please enter your username"
-              />
-              <div><label>Address</label></div>
-              <input
-                type="text"
-                name="address"
-                placeholder="Please enter your address"
               />
               <div><label>Password</label></div>
               <input
@@ -107,24 +96,6 @@ function LoginSignup() {
         FormFields(){
           return (
             <>
-              <div><label>Nickname</label></div>
-              <input
-                type="text"
-                name="nickname"
-                placeholder="Please enter your Nickname"
-              />
-              <div><label>Username</label></div>
-              <input
-                type="text"
-                name="username"
-                placeholder="Please enter your username"
-              />
-              <div><label>Address</label></div>
-              <input
-                type="text"
-                name="address"
-                placeholder="Please enter your address"
-              />
               <div><label>Password</label></div>
               <input
                 type="password"

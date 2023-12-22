@@ -59,7 +59,7 @@ function App() {
           <Route path="/logout" element={<Logout />}></Route>
           <Route path="/profile/:nickname" element={<Profile />}></Route>
           {isUserAuthenticated && true}
-            //<Route path="/dashboard" element={<User />}></Route>
+            <Route path="/dashboard" element={<User />}></Route>
           <Route path="/*" element={<NotFound />}></Route>
         </Routes>
 

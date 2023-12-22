@@ -35,6 +35,8 @@ const User = () => {
     }, [loggedProfile])
 
     async function getUserInfo() {
+
+        console.log(Auth)
         const cognitoUserID = Auth.Credentials.Auth.user?.attributes?.sub;
         const nicknameForRequest = Auth.Credentials.Auth.user?.attributes?.nickname;
         console.log(nicknameForRequest, cognitoUserID)
@@ -92,13 +94,6 @@ const User = () => {
                 This session matches:
             </div>
 
-            {matches != undefined &&
-                <div className="containerUser">
-                    <Banner prop={matches[0]}></Banner>
-                    <Banner prop={matches[1]}></Banner>
-                    <Banner prop={matches[2]}></Banner>
-                </div>
-            }
 
         </div>
     )

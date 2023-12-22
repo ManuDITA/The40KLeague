@@ -9,12 +9,12 @@ interface SessionPageProps { }
 const SessionPage: FC<SessionPageProps> = () => {
 
   const { idSeason, idSessions } = useParams<{ idSeason: string; idSessions: string }>();
-  const url = window.location.pathname;
   const [session, setSession] = useState<Session | undefined>(undefined);
   const [players, setPlayers] = useState([]);
   const [isPageLoaded, setIsPageLoaded] = useState(false)
+  const url = window.location.pathname.split('/').pop();
 
-
+  //triggering on url change for new api call
   useEffect(() => {
     fetch(apiPaths.tournamentsAPIEndpoint + window.location.pathname)
       .then((res) => (res.json())) // Parse the response as JSON
@@ -30,7 +30,9 @@ const SessionPage: FC<SessionPageProps> = () => {
         console.error('Error:', error);
       });
 
-  }, [idSeason, idSessions]);
+  }, [url]);
+
+
 
   return (
     <>
@@ -39,7 +41,7 @@ const SessionPage: FC<SessionPageProps> = () => {
 
         <div className='container'>
           <div className='boldBlue'>
-            {session?.is_session_active===1 ? (
+            {session?.is_session_active === 1 ? (
               <>
                 <span>{session?.tournament_id.toUpperCase()} - {session?.session_id.toUpperCase()} - EN COURS</span>
                 <span className="video__icon">
@@ -93,13 +95,13 @@ const SessionPage: FC<SessionPageProps> = () => {
                 {players != undefined && players.map((p, index) => {
                   return (
                     <tr key={index}>
-                      <td>{index+1}</td>
+                      <td>{index + 1}</td>
                       <td>{p.player_nickname}</td>
-                      <td>{}</td>
-                      <td>{}</td>
-                      <td>{}</td>
+                      <td>{ }</td>
+                      <td>{ }</td>
+                      <td>{ }</td>
                       <td>{p.total_score}</td>
-                      <td>{}</td>
+                      <td>{ }</td>
                     </tr>
                   )
                 }
