@@ -23,12 +23,12 @@ const Tournament: FC<TournamentProps> = () => {
     fetch(apiPaths.tournamentsAPIEndpoint + window.location.pathname)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
+        console.log('Getting tournament information: ', data)
         setTournamentInfo(data.tournament[0]);
         setPlayerSubscriptions(data.playerSubscriptions); // Set player subscriptions here
       });
 
-      getSessionsInTournament('nes1')
+      //getSessionsInTournament('nes1')
   }, []);
 
   function getSessionsInTournament(tournamentID: string) {

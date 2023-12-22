@@ -20,17 +20,16 @@ const User = () => {
 
 
     useEffect(() => {
-        getUserInfo()
-    }, [isUserAuthenticated, token])
+        //getUserInfo()
+    }, [isUserAuthenticated])
 
     useEffect(() => {
-        console.log(window.location.pathname)
     }, [])
 
     useEffect(() => {
         if (loggedProfile != undefined) {
             console.log("profile:", loggedProfile)
-            getUserMatches()
+            //getUserMatches()
         }
     }, [loggedProfile])
 

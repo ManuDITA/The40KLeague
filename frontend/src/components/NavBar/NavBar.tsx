@@ -15,11 +15,12 @@ const NavBar: FC<NavBarProps> = () => {
   const { isUserAuthenticated, setIsUserAuthenticated, token, setToken } = useContext(UserContext);
   const [fetchedSessions, setFetchedSessions] = useState([]);
 
-  async function logout() {
-    let ses = await Auth.signOut()
-    setIsUserAuthenticated(false)
-
-  }
+  const customSignout = async () => {
+    console.log("Signing out");
+    await Auth.signOut();
+    setIsUserAuthenticated(false);
+    setToken("");
+  };
 
   return (
     <div className="topnav">
@@ -71,7 +72,7 @@ const NavBar: FC<NavBarProps> = () => {
           </div>}
         {isUserAuthenticated &&
           <div className="dropdown">
-            <Link to={'/logout'}><button className="dropbtn" onClick={() => logout()}>Logout</button></Link>
+            <Link to={'/loginsignup'}><button className="dropbtn" onClick={customSignout}>Logout</button></Link>
           </div>}
 
       </div>

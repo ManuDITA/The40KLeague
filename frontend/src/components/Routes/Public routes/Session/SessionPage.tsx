@@ -24,7 +24,6 @@ const SessionPage: FC<SessionPageProps> = () => {
         setSession(data.session[0]); // Set the parsed data in your state or variable
         setPlayers(data.playerRanking.sort((a, b) => b.total_score - a.total_score))
         setIsPageLoaded(true)
-        console.log(data.session[0].session_image_location)
       })
       .catch((error) => {
         console.error('Error:', error);

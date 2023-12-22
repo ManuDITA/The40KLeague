@@ -17,32 +17,41 @@ Amplify.configure({
 
 function LoginSignup() {
 
-  const [jwt, setJwt] = useState('')
-  const [output, setOutput] = useState('')
   const navigate = useNavigate();
 
   const { isUserAuthenticated, setIsUserAuthenticated, token, setToken } = useContext(UserContext);
+  const [isSigningOut, setIsSigningOut] = useState(false);
 
   useEffect(() => {
-    getToken();
-  }, [])
-
-  useEffect(() => {
-    //console.log('change token' + token)
-  }, [token])
+    console.log('isUserAuthenticated (inside useEffect): ', isUserAuthenticated, 'isSigningOut:', isSigningOut);
+    if (isUserAuthenticated && !isSigningOut) {
+      console.log('user logged at the moment: getting the token');
+      getToken();
+    } else {
+      console.log('No user logged in at the moment');
+    }
+  }, [isUserAuthenticated, isSigningOut]);
 
   const getToken = async () => {
+    console.log('getting token')
     const session = await Auth.currentSession();
     const receivedToken = session.getIdToken().getJwtToken();
 
     console.log(session)
-    if (receivedToken != undefined) {
-      setIsUserAuthenticated(true);
-      setToken(receivedToken)
-      navigate('/dashboard')
-
-    }
+    setToken(receivedToken)
+    navigate('/dashboard')
   }
+
+  const customSignout = async () => {
+    console.log("Signing out");
+    setIsSigningOut(true); // Set a flag indicating sign-out process
+    await Auth.signOut();
+    setIsUserAuthenticated(false);
+    setToken("");
+    navigate('/');
+    setIsSigningOut(false); // Reset the flag after sign-out is complete
+  };
+
 
   return (
     <Authenticator components={{
@@ -56,64 +65,29 @@ function LoginSignup() {
                 name="username"
                 placeholder="Please enter your username"
               />
-              <div><label>Password</label></div>
-              <input
-                type="password"
-                name="password"
-                placeholder="Please enter your password"
-              />
-              <div><label>Name</label></div>
-              <input
-                type="text"
-                name="name"
-                placeholder="Please enter your name"
-              />
-              <div><label>Email</label></div>
-              <input
-                type="text"
-                name="email"
-                placeholder="Please enter a valid email"
-              />
-              <div><label>Phone number</label></div>
-              <input
-                type="text"
-                name="phone_number"
-                placeholder="Please enter a valid number"
-              />
-              <div><label>Birth date</label></div>
-              <input
-                type="date"
-                name="birthdate"
-                placeholder="Please enter a valid date"
-              />
-            </>
-          );
-        },
-      },
 
-      SignIn: {
-        //@ts-ignore
-        FormFields(){
-          return (
-            <>
-              <div><label>Password</label></div>
-              <input
-                type="password"
-                name="password"
-                placeholder="Please enter your password"
-              />
               <div><label>Name</label></div>
               <input
                 type="text"
                 name="name"
                 placeholder="Please enter your name"
               />
+
               <div><label>Email</label></div>
               <input
                 type="text"
                 name="email"
                 placeholder="Please enter a valid email"
               />
+
+              <div><label>Password</label></div>
+              <input
+                type="password"
+                name="password"
+                placeholder="Please enter your password"
+              />
+
+
               <div><label>Phone number</label></div>
               <input
                 type="text"
@@ -128,27 +102,25 @@ function LoginSignup() {
               />
             </>
           );
-        },
+        }
       }
     }}
     >
       {({ signOut, user }) => {
-        //console.log(user)
         setIsUserAuthenticated(true)
         return (
           <div>
-            <button onClick={signOut}>Sign out</button>
+            <button onClick={customSignout}>Sign out</button>
+
             <div>{user?.username}</div>
-            <div>{jwt}</div>
             <div>{token}</div>
-            <br>
-            </br>
           </div>
         )
       }}
     </Authenticator >
   )
 }
+
 
 
 

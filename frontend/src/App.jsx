@@ -33,14 +33,18 @@ function App() {
     const receivedToken = session.getIdToken().getJwtToken();
 
     if (receivedToken != undefined) {
-      console.log(Auth.Credentials.Auth.user?.attributes)
+      console.log("A user is logged in: ", session.accessToken.payload)
       setIsUserAuthenticated(true)
       setToken(receivedToken)
-    } else
+    } else{
+      console.log("No token, user not logged into the website")
+      console.log(session)
       setIsUserAuthenticated(false)
+    }
   }
 
   useEffect(() => {
+    console.log("App mounted")
     getToken()
 
   }, [])
@@ -58,8 +62,8 @@ function App() {
           <Route path="/loginsignup" element={<LoginSignup />}></Route>
           <Route path="/logout" element={<Logout />}></Route>
           <Route path="/profile/:nickname" element={<Profile />}></Route>
-          {isUserAuthenticated && true}
-            <Route path="/dashboard" element={<User />}></Route>
+          {isUserAuthenticated && 
+            <Route path="/dashboard" element={<User />}></Route>}
           <Route path="/*" element={<NotFound />}></Route>
         </Routes>
 
