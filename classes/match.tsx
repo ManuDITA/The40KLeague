@@ -1,19 +1,29 @@
-class Match{
+export class Match {
 
-    player1: string;
-    player2: string;
-    gameCode: string;
-    army1: string;
-    army2: string;
-    score: string;
-    gameType: string;
-    statusPlayed: any;
+    match_id: number;
+    session_id: string;
+    tournament_id: string;
 
-    utgPlayer: string;
+    
+    player1_id: number
+    player1_name: string;
+    player1_score: number
+    player1_army: string;
+    player1_list: string
 
-    attacker: boolean;
+    player2_id: number
+    player2_name: string;
+    player2_score: number;
+    player2_army: string;
+    player2_list: string
 
-    constructor(player1: string, player2: string, attacker: boolean, gameCode: string, army1:string, army2:string, score:string, gameType:string, statusPlayed:string, utgPlayer: string){
+    is_match_played: any;
+    game_code: string;
+    match_date: string;
+    utg_player: number;
+    is_player1_attacker: number;
+
+    /*constructor(player1: string, player2: string, attacker: boolean, gameCode: string, army1: string, army2: string, score: string, gameType: string, statusPlayed: string, utgPlayer: string) {
         this.player1 = player1;
         this.player2 = player2;
         this.gameCode = gameCode;
@@ -27,7 +37,5 @@ class Match{
 
         this.attacker = attacker;
 
-    }
+    }*/
 }
-
-export { Match }

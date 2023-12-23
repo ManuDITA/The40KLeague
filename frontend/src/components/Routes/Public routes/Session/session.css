@@ -36,7 +36,7 @@
 }
 
 .sessionImage {
-    width: 80%;
+    width: 60%;
     max-height: 500px;
     object-fit: cover;
     opacity: 0.95;
@@ -81,6 +81,13 @@ th {
     padding: 20px;
     text-align: left;
 }
+
+.banners-container {
+  display: flex;
+  white-space: nowrap;
+  overflow-x: auto;
+}
+
 
 
 

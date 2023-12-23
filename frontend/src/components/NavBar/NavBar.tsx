@@ -63,7 +63,7 @@ const NavBar: FC<NavBarProps> = () => {
         </div>
 
         <div className="dropdown">
-          <Link to={'/dashboard'}><button className="dropbtn">User</button></Link>
+          <Link to={'/dashboard'}><button className="dropbtn">Dashboard</button></Link>
         </div>
 
         {!isUserAuthenticated &&

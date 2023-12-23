@@ -34,7 +34,7 @@
 
 }
 
-.statusPlayed {
+.is_match_played {
 
   padding-top: 10px;
   background-color: #2E4555;
@@ -115,7 +115,7 @@
   bottom: 5%;
 }
 
-.player1 {
+.player1_name {
 
   position: absolute;
   font-family: Arial Black, Helvetica, sans-serif;
@@ -125,7 +125,7 @@
   bottom: 7%;
 }
 
-.player2 {
+.player2_name {
 
   position: absolute;
   font-family: Arial Black, Helvetica, sans-serif;

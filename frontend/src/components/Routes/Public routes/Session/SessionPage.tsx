@@ -4,6 +4,9 @@ import { Session } from '../../../../../../classes/Session';
 import { Link, useParams } from 'react-router-dom';
 import apiPaths from '../../../../../../apiList';
 
+import { Match } from '../../../../../../classes/match';
+import Banner from '../../../Banner/Banner';
+
 interface SessionPageProps { }
 
 const SessionPage: FC<SessionPageProps> = () => {
@@ -12,14 +15,23 @@ const SessionPage: FC<SessionPageProps> = () => {
   const [session, setSession] = useState<Session | undefined>(undefined);
   const [players, setPlayers] = useState([]);
   const [isPageLoaded, setIsPageLoaded] = useState(false)
+
+  const [matchesInSession, setMatchesInSession] = useState([]);
+
   const url = window.location.pathname.split('/').pop();
 
   //triggering on url change for new api call
   useEffect(() => {
+    getSessionInfo()
+    getMatchesInSession()
+  }, [url]);
+
+
+
+  const getSessionInfo = () => {
     fetch(apiPaths.tournamentsAPIEndpoint + window.location.pathname)
       .then((res) => (res.json())) // Parse the response as JSON
       .then((data) => {
-        //console.log(data); // Log the parsed JSON data
         console.log(data)
         setSession(data.session[0]); // Set the parsed data in your state or variable
         setPlayers(data.playerRanking.sort((a, b) => b.total_score - a.total_score))
@@ -28,10 +40,25 @@ const SessionPage: FC<SessionPageProps> = () => {
       .catch((error) => {
         console.error('Error:', error);
       });
+  }
 
-  }, [url]);
+  const getMatchesInSession = () => {
+    fetch(apiPaths.tournamentsAPIEndpoint + window.location.pathname + '/getMatchesInSession')
+      .then((res) => (res.json())) // Parse the response as JSON
+      .then((data) => {
+        //console.log(data); // Log the parsed JSON data
+        console.log(data)
+        setMatchesInSession(data.matches)
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  }
 
-
+  // Filter and sort the most recent 4 matches
+  const mostRecentMatches = matchesInSession
+    .sort((a, b) => new Date(b.match_date) - new Date(a.match_date))
+    .slice(0, 4);
 
   return (
     <>
@@ -49,19 +76,26 @@ const SessionPage: FC<SessionPageProps> = () => {
                 </span>
               </>
 
-            ) : (
-              <div>{session?.tournament_id.toUpperCase()} - {session?.session_id.toUpperCase()} - TERMINÉE</div>)}
+            ) :
+              (
+                <div>{session?.tournament_id.toUpperCase()} - {session?.session_id.toUpperCase()} - TERMINÉE</div>)}
           </div>
           <div className='sessionImageText'>
             <img src={session?.session_image_location} className='sessionImage'></img>
             <div className='sessionName'> {session?.session_name} </div>
           </div>
+
           <div className='boldBlue'>
             DERNIERS RÉSULTATS :
           </div>
-          <div className='description'>
-            Last Update : 12h00 - 26/10/2023
+          <div style={{ whiteSpace: 'nowrap', overflowX: 'auto' }}>
+            {mostRecentMatches.map((m: Match) => (
+              <Banner key={m.match_id} prop={m} />
+            ))}
           </div>
+
+          <br></br>
+
 
           <Link to='/tournament/nes1'>
             <img className='seasonImage' src="/session/pairings-image.avif" />
@@ -109,11 +143,13 @@ const SessionPage: FC<SessionPageProps> = () => {
               </tbody>
             </table>
           </div>
+
         </div>
 
 
       )}
-    </>)
+    </>
+  )
 
 }
 
