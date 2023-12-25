@@ -49,6 +49,7 @@
   font-family: Arial Black, Helvetica, sans-serif;
   font-size: 32pt;
   vertical-align: middle;
+  text-align: center;
   align-items: center;
 }
 
@@ -156,4 +157,31 @@
 
   height: 180px;
 
+}
+
+.inputScorePlayer1 {
+  width: 20%;
+  height: 25%;
+  box-shadow: 0px 3px;
+  margin: 10px;
+  overflow-y: visible;
+  border-color: black;
+  border-width: 0px;
+  padding: 0px;
+  background-color: transparent;
+  font-family: Arial Black, Helvetica, sans-serif;
+  color: #2E4555;
+  font-size: 80pt;
+  
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }

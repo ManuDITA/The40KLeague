@@ -11,3 +11,121 @@
     font-family: 'Arial Black';
     color: var(--custom-Blue);
 }
+
+/* App.css */
+.login-signup-container {
+  max-width: 500px;
+  margin: auto;
+  margin-top: 1%;
+  margin-bottom: 5%;
+  border-style: solid;
+  border-radius: 10px;
+  border-width: 1px;
+  box-shadow: 0 10px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(255, 232, 232, 0.19);
+  border-color: var(--custom-Blue);
+  padding: 1%;
+  background-color: rgb(255, 255, 255);
+}
+
+.tabs {
+  border-radius: 20px;
+  background-color: var(--custom-Blue);
+  display: flex;
+  
+  margin-bottom: 10%;
+}
+
+.tab {
+  font-size: 30px;
+  border-radius: 20px;
+  flex: 1;
+  padding: 3px;
+  margin: 1%;
+  text-align: center;
+  cursor: pointer;
+  color: white;
+  background-color: var(--custom-Blue);
+  box-shadow: 0 1px 9px 0 rgba(0, 0, 0, 0.2), 0 1px 10px 0 rgba(255, 232, 232, 0.19);
+
+}
+
+.tab:hover {
+  color: white;
+  background-color: var(--custom-Red)
+}
+
+.active-tab {
+  color: black;
+  background-color: white;
+}
+
+.forms {
+  display: flex;
+  flex-direction: column;
+}
+
+.form {
+  display: none;
+}
+
+.form.active {
+  display: block;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 500px) {
+  .tabs {
+    flex-direction: column;
+  }
+
+  .tab {
+    width: 100%;
+  }
+}
+
+
+/* Form elements styling */
+h2 {
+  margin-bottom: 15px;
+}
+
+label {
+  padding: 5px;
+  font-weight: bold;
+}
+
+input {
+  padding: 10px;
+  margin-bottom: 6%;
+  width: 100%;
+  margin-top: 2%;
+  color: black;
+  background-color: white;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 20px;
+}
+
+button {
+  padding: 10px;
+  margin: 1%;
+  cursor: pointer;
+  background-color: var(--custom-Blue);
+  color: #fff;
+  border: none;
+  width: 30%;
+  border-radius: 4px;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 600px) {
+  .tabs {
+    flex-direction: column;
+  }
+
+  .tab {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}

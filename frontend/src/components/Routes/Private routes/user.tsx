@@ -9,39 +9,42 @@ import './privateRoutes.css'
 import { Session } from "../../../../../classes/Session";
 import Banner from "../../Banner/Banner";
 import { Match } from "../../../../../classes/match";
+import apiPaths from "../../../../../apiList";
+import { match } from "assert";
 
 const User = () => {
     const { isUserAuthenticated, setIsUserAuthenticated, token, setToken } = useContext(UserContext)
-    const [user, setUser] = useState();
+    const [cognitoUser, setCognitoUser] = useState();
     const [matches, setMatches] = useState<Match[] | undefined>()
-    const [loggedProfile, setLoggedProfile] = useState()
-
-    let receivedSession;
 
 
     useEffect(() => {
+        console.log('is user authenticated: ', isUserAuthenticated)
         getUserInfo()
     }, [isUserAuthenticated])
 
     useEffect(() => {
-        console.log('Logged user: ', user)
-    }, [user])
-
-    useEffect(() => {
-        if (loggedProfile != undefined) {
-            console.log("profile:", loggedProfile)
-            //getUserMatches()
+        if (cognitoUser != undefined) {
+            console.log('Logged user: ', cognitoUser)
+            getUserMatches()
         }
-    }, [loggedProfile])
+    }, [cognitoUser])
+
 
     async function getUserInfo() {
-        setUser(await Auth.currentUserPoolUser());
-        /*
-        console.log(Auth)
-        const cognitoUserID = Auth.Credentials.Auth.user?.attributes?.sub;
-        const nicknameForRequest = Auth.Credentials.Auth.user?.attributes?.nickname;
-        console.log(nicknameForRequest, cognitoUserID)
-        await fetch(`https://iw5168sfve.execute-api.eu-west-3.amazonaws.com/dev/user/${nicknameForRequest}?cognitoUserID=${cognitoUserID}`, {
+        setCognitoUser(await Auth.currentUserPoolUser());
+
+        const session = await Auth.currentSession();
+        const receivedToken = session.getIdToken().getJwtToken();
+
+        setToken(receivedToken)
+
+    }
+
+    async function getUserMatches() {
+        console.log('fetching ' + apiPaths.playersAPIEndpoint + apiPaths.player + '/' + cognitoUser.username)
+        console.log(token)
+        await fetch(apiPaths.playersAPIEndpoint + apiPaths.player + '/' + cognitoUser.username, {
             method: 'GET',
             headers: {
                 'Authorization': token
@@ -49,51 +52,27 @@ const User = () => {
         }
         ).then((res) => (res.json()))
             .then((output) => {
-                console.log("API call: ", output)
-
-                receivedSession = output.session[0]
-                console.log("Session: ", receivedSession)
-                getUserMatches(receivedSession, Auth.Credentials.Auth.user?.attributes.nickname)
-                setUser(output.user)
-                setLoggedProfile(Auth.Credentials.Auth.user?.attributes)
-            })*/
-    }
-
-    function getUserMatches(session, nickname) {
-        console.log(session)
-        session?.sessionTable?.map((row, index) => {
-            console.log(row.Nickname.toLowerCase())
-            if (row.Nickname.toLowerCase() === nickname.toLowerCase()) {
-                console.log("found")
-                let status;
-                if (row["Att/Def1"] == "A")
-                    status = true;
-                else
-                    status = false
-
-                setMatches([
-                    //match 1
-                    new Match(row.Nickname, row.Game1_Opp, row["Att/Def1"] == "A", row["GameSetup Code 1"], row["Game1 Pairing Factions"].split(" - ")[0], row["Game1 Pairing Factions"].split(" - ")[1], ". - .", row["Game1"], row["Game1_Day"], row["Nickname"]),
-                    //match 2
-                    new Match(row.Nickname, row.Game2_Opp, row["Att/Def2"] == "A", row["GameSetup Code 2"], row["Game2 Pairing Factions"].split(" - ")[0], row["Game2 Pairing Factions"].split(" - ")[1], ". - .", row["Game2"], row["Game2_Day"], row["Nickname"]),
-                    //match 3
-                    new Match(row.Nickname, row.Game3_Opp, row["Att/Def3"] == "A", row["GameSetup Code 3"], row["Game2 Pairing Factions"].split(" - ")[0], row["Game3 Pairing Factions"].split(" - ")[1], ". - .", row["Game3"], row["Game3_Day"], row["Nickname"])
-                ])
-
-            }
-        })
+                console.log("Matches: ", output)
+                setMatches(output)
+            })
     }
 
     return (
         <div>
             <img src="/public/factions_backgrounds/Space Marines.jfif" className="userBackgroundImage"></img>
             <div className="boldWhite txtOverImage">
-                {user!= undefined && user.attributes.name} - {user!= undefined && user.username}
+                {cognitoUser != undefined && cognitoUser.attributes.name} - {cognitoUser != undefined && cognitoUser.username}
             </div>
 
             <div className="containerUser title boldBlue">
                 This session matches:
             </div>
+
+            <span style={{ overflowX: 'auto' }}>
+                {matches != undefined && matches.map((m: Match) => (
+                    <Banner key={m.match_id} prop={m} canBeModified={true} />
+                ))}
+            </span>
 
 
         </div>

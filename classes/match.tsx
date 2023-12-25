@@ -21,7 +21,10 @@ export class Match {
     game_code: string;
     match_date: string;
     utg_player: number;
-    is_player1_attacker: number;
+    //if 0, no one proposed a match score
+    //if 1, player1 proposed a match score
+    //if 2, player2 proposed a match score
+    match_score_acceptance: number;
 
     /*constructor(player1: string, player2: string, attacker: boolean, gameCode: string, army1: string, army2: string, score: string, gameType: string, statusPlayed: string, utgPlayer: string) {
         this.player1 = player1;

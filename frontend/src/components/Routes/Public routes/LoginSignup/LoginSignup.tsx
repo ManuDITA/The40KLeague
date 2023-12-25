@@ -22,6 +22,9 @@ const LoginSignup: FC = () => {
 
   const [confirmationCode, setConfirmationCode] = useState(''); // Added state for confirmation code
   const [isUserConfirmed, setIsUserConfirmed] = useState(true);
+  const [errorMessage, setErrormessage] = useState('')
+  const [isUserRegistered, setIsUserRegistered] = useState(false);
+  let tokenForApiRequest = '';
 
   const changeCognitoUserParams = (key: string, value: string) => {
     setCognitoUser((prevUser) => ({
@@ -36,10 +39,12 @@ const LoginSignup: FC = () => {
       console.log('User signed in:', user);
       // Handle successful login (update context, navigate, etc.)
       setIsUserAuthenticated(true);
+      console.log((await Auth.currentSession()).getIdToken().getJwtToken())
       navigate('/dashboard');
+
     } catch (error) {
       console.error('Error signing in:', error);
-      // Handle login error (show error message, etc.)
+      setErrormessage(error.message)
     }
   };
 
@@ -89,9 +94,11 @@ const LoginSignup: FC = () => {
       });
 
       console.log('User signed up:', user);
+      setIsUserRegistered(true)
       setIsUserConfirmed(false); // Set the state to false to show the confirmation code form
     } catch (error) {
       console.error('Error signing up:', error);
+      setErrormessage(error.message)
       // Handle sign-up error (show error message, etc.)
     }
   };
@@ -108,75 +115,108 @@ const LoginSignup: FC = () => {
     }
   };
 
+  const [activeTab, setActiveTab] = useState('login');
+
+  const switchTab = (tab: string) => {
+    setActiveTab(tab);
+  };
+
+
   return (
     <div>
-      {/* Login Form */}
-      <h2>Login</h2>
-      <div>
-        <label>Username:</label>
-        <input type="text" value={cognitoUser.username} onChange={(e) => changeCognitoUserParams('username', e.target.value)} />
-        <label>Password:</label>
-        <input type="password" value={cognitoUser.password} onChange={(e) => changeCognitoUserParams('password', e.target.value)} />
+      <div className="login-signup-container">
+        {/* Tabs */}
+        {isUserRegistered === false &&
+        <div className="tabs">
+          <div
+            className={`tab ${activeTab === 'login' ? 'active-tab' : ''}`}
+            onClick={() => switchTab('login')}
+          >
+            Login
+          </div>
+          <div
+            className={`tab ${activeTab === 'signup' ? 'active-tab' : ''}`}
+            onClick={() => switchTab('signup')}
+          >
+            Sign Up
+          </div>
+        </div>
+        }
+        {/* Forms */}
+        <div className="forms">
+          <div className={`form ${activeTab === 'login' ? 'active' : ''}`}>
+            {/* Login Form */}
+
+            <div>
+              <label>Username:</label>
+              <input type="text" value={cognitoUser.username} onChange={(e) => changeCognitoUserParams('username', e.target.value)} />
+              <label>Password:</label>
+              <input type="password" value={cognitoUser.password} onChange={(e) => changeCognitoUserParams('password', e.target.value)} />
+            </div>
+            <button onClick={handleLogin}>Login</button>
+          </div>
+        </div>
+
+        <div className={`form ${activeTab === 'signup' ? 'active' : ''}`}>
+          {/* Signup Form */}
+          {isUserRegistered === false &&
+            <>
+              <div>
+                <label>Username:</label>
+                <input
+                  type="text"
+                  value={cognitoUser.username}
+                  onChange={(e) => changeCognitoUserParams('username', e.target.value)}
+                />
+                <label>Password:</label>
+                <input
+                  type="password"
+                  value={cognitoUser.password}
+                  onChange={(e) => changeCognitoUserParams('password', e.target.value)}
+                />
+                <label>Email:</label>
+                <input
+                  type="text"
+                  value={cognitoUser.email}
+                  onChange={(e) => changeCognitoUserParams('email', e.target.value)}
+                />
+                <label>Phone Number:</label>
+                <input
+                  type="text"
+                  value={cognitoUser.phone_number}
+                  onChange={(e) => changeCognitoUserParams('phone_number', e.target.value)}
+                />
+                <label>Name:</label>
+                <input
+                  type="text"
+                  value={cognitoUser.name}
+                  onChange={(e) => changeCognitoUserParams('name', e.target.value)}
+                />
+                <label>Date:</label>
+                <input
+                  type="date"
+                  value={cognitoUser.birthdate}
+                  onChange={(e) => changeCognitoUserParams('birthdate', e.target.value)}
+                />
+              </div>
+              <button onClick={handleSignUp}>Sign Up</button>
+              <div>{errorMessage}</div>
+            </>
+          }
+          {/* Confirmation Code Form, only showable when user has been registered */}
+          {isUserConfirmed === false && (
+            <>
+              <h2>Confirm Sign Up</h2>
+              <label>Confirmation Code:</label>
+              <input type="text" value={confirmationCode} onChange={(e) => setConfirmationCode(e.target.value)} />
+              <button onClick={handleConfirmSignUp}>Confirm Sign Up</button>
+              <button onClick={() => Auth.resendSignUp(cognitoUser.username)}>Resend Sign Up</button>
+            </>
+          )}
+
+          {/* Logout Button */}
+        </div>
       </div>
-      <button onClick={handleLogin}>Login</button>
-
-      {/* Signup Form */}
-      <h2>Sign Up</h2>
-      <div>
-        <label>Username:</label>
-        <input
-          type="text"
-          value={cognitoUser.username}
-          onChange={(e) => changeCognitoUserParams('username', e.target.value)}
-        />
-        <label>Password:</label>
-        <input
-          type="password"
-          value={cognitoUser.password}
-          onChange={(e) => changeCognitoUserParams('password', e.target.value)}
-        />
-        <label>Email:</label>
-        <input
-          type="text"
-          value={cognitoUser.email}
-          onChange={(e) => changeCognitoUserParams('email', e.target.value)}
-        />
-        <label>Phone Number:</label>
-        <input
-          type="text"
-          value={cognitoUser.phone_number}
-          onChange={(e) => changeCognitoUserParams('phone_number', e.target.value)}
-        />
-        <label>Name:</label>
-        <input
-          type="text"
-          value={cognitoUser.name}
-          onChange={(e) => changeCognitoUserParams('name', e.target.value)}
-        />
-        <label>Date:</label>
-        <input
-          type="date"
-          value={cognitoUser.birthdate}
-          onChange={(e) => changeCognitoUserParams('birthdate', e.target.value)}
-        />
-      </div>
-      <button onClick={handleSignUp}>Sign Up</button>
-
-
-      {/* Confirmation Code Form, only showable when user has been registered */}
-      {isUserConfirmed === false && (
-        <>
-          <h2>Confirm Sign Up</h2>
-          <label>Confirmation Code:</label>
-          <input type="text" value={confirmationCode} onChange={(e) => setConfirmationCode(e.target.value)} />
-          <button onClick={handleConfirmSignUp}>Confirm Sign Up</button>
-          <button onClick={() => Auth.resendSignUp(cognitoUser.username)}>Resend Sign Up</button>
-        </>
-      )}
-
-      {/* Logout Button */}
-      <button onClick={handleSignOut}>Sign Out</button>
-      <button onClick={registerUserToDatabase}>Registering trial</button>
     </div>
   );
 };

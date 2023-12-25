@@ -45,6 +45,7 @@ function App() {
 
     if (receivedToken != undefined) {
       console.log("A user is logged in: ", session.accessToken.payload)
+      console.log("Token at app level: ", receivedToken)
       setIsUserAuthenticated(true)
       setToken(receivedToken)
     } else{

@@ -103,7 +103,7 @@ function handleGetMatchesInSession(tournamentID, sessionID, callback) {
     const matchesSql = `
         SELECT *
         FROM Matches
-        WHERE tournament_id = '${tournamentID}' AND session_id = '${sessionID}';
+        WHERE tournament_id = '${tournamentID}' AND session_id = '${sessionID}' AND is_match_played = 1;
     `;
 
     executeQuery(matchesSql, (matchesErr, matchesResult) => {
