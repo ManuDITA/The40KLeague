@@ -6,6 +6,7 @@ import apiPaths from '../../../../../../apiList';
 
 import { Match } from '../../../../../../classes/match';
 import Banner from '../../../Banner/Banner';
+import { Player } from '../../../../../../classes/Player';
 
 interface SessionPageProps { }
 
@@ -81,7 +82,7 @@ const SessionPage: FC<SessionPageProps> = () => {
                 <div>{session?.tournament_id.toUpperCase()} - {session?.session_id.toUpperCase()} - TERMINÉE</div>)}
           </div>
           <div className='sessionImageText'>
-            <img src={session?.session_image_location} className='sessionImage'></img>
+            <img src={session?.session_image_location} className='sessionImageInSession'></img>
             <div className='sessionName'> {session?.session_name} </div>
           </div>
 
@@ -114,7 +115,7 @@ const SessionPage: FC<SessionPageProps> = () => {
           <div className='myTableContainer'>
             <table>
               <thead>
-                <tr className='tableRow'>
+                <tr  className='tableRow'>
                   <th>RANK</th>
                   <th>NICKNAME</th>
                   <th>FACTION</th>
@@ -125,12 +126,12 @@ const SessionPage: FC<SessionPageProps> = () => {
                 </tr>
               </thead>
               <tbody>
-                {players != undefined && players.map((p, index) => {
+                {players != undefined && players.map((p:Player, index) => {
                   return (
                     <tr key={index}>
                       <td>{index + 1}</td>
                       <td>{p.player_nickname}</td>
-                      <td>{ }</td>
+                      <td style={{ textAlign: 'center' }}><img src={"../../../public/factions/" + `${p.favourite_army}.png`}  style={{height: '70px'}}></img></td>
                       <td>{ }</td>
                       <td>{ }</td>
                       <td>{p.total_score}</td>

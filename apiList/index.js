@@ -3,7 +3,7 @@ const apiPaths = {
     playersAPIEndpoint: 'https://wwhlvoay4l.execute-api.eu-west-3.amazonaws.com/dev',
     matchesAPIEndpoint: 'https://jzm37zyilc.execute-api.eu-west-3.amazonaws.com/dev',
 
-    getSessionsInTournament: '/tournament/getSessionsInTournament',
+    getSessionsInTournament: '/tournament/sessions',
     getMatchesInSession: '/tournament/getMatchesInSession',
     player: '/player', // /player_nickname
     acceptMatch: '/acceptMatch',

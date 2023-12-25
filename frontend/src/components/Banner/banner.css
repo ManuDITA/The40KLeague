@@ -185,3 +185,17 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+.match_id{
+  position: absolute;
+  left:90%;
+  bottom: 1%;
+  color: #a0a0a0;
+  overflow: visible;
+  border-radius: 60px 0px 0px 0px;
+  font-family: Arial Black, Helvetica, sans-serif;
+  font-size: 10pt;
+  text-align: left;
+  vertical-align: middle;
+  z-index: 0;
+}

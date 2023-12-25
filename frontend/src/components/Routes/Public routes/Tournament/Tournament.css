@@ -1,19 +1,75 @@
-.seasonImage{
-    width: 20%;
-}
 
 .containerSessions {
     display: flex;
-    justify-content: space-evenly;
-    background-color: rgba(207, 207, 207, 0.075);
-    color: rgb(167, 0, 0);
+    flex-wrap: wrap;
+    justify-content: center;
     flex-direction: row;
-    
-
 }
 
-.seasonImage{
-    object-fit: cover;
-    width: 40vh;
-    height: 30vh;
+.sessionImage {
+    overflow: auto; 
+    width: 100%;
+    padding: 1px;
+    height: 200px;
+    background-color: rgb(223, 223, 223);
+    object-fit: cover; /* Crop the images */
+    
+}
+
+.singleSessionContainer{
+    margin: 10px;
+    max-width: 20%;
+    padding: 0px;
+    background-color: rgb(255, 255, 255);
+}
+
+.boldBlue {
+    font-size: 38px;
+    text-align: center;
+    padding-top: 10px;
+}
+
+
+.description {
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.playerSubscriptions {
+    margin-bottom: 20px;
+    border: 1px solid #aa3d3d;
+    padding: 20px;
+}
+
+.myTableContainer {
+    margin-bottom: 60px;
+}
+
+
+td {
+    padding: 5px 10px;
+}
+
+.favouriteArmy {
+    text-align: center;
+}
+
+.hasPlayerPayed {
+    text-align: center;
+}
+
+.playerPoints {
+    text-align: center;
+}
+
+.sessionImage:hover{
+    opacity: 0.8;
+}
+
+.sessionNameDescription{
+    font-size: 20pt;
+}
+
+.boldRed{
+    color: rgb(161, 0, 0);
 }

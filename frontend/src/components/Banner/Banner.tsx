@@ -148,10 +148,14 @@ function Banner(prop: any) {
       {/*match?.score == undefined &&
         <></>
   */}
-      {match?.match_id}
-      <div className='rectangle' ref={divRef}>
-        <div className='innerRectangle'>
 
+      <div className='rectangle' ref={divRef}>
+
+        <div className='innerRectangle'>
+          {<div className='match_id'>
+            {match?.match_id}
+          </div>
+          }
 
           {match?.utg_player == 1 &&
             <img src={"../../../public/banner/Img_UTG_Logo.png"} className='utgIcon1'></img>

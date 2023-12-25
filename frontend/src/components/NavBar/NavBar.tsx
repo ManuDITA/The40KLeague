@@ -4,6 +4,7 @@ import pageLogo from '/logo.avif'
 import { Session } from '../../../../classes/Session';
 import { TournamentClass } from '../../../../classes/TournamentClass';
 import { UserContext } from '../../App';
+import './navbar.css'
 
 import { Auth } from 'aws-amplify';
 
@@ -23,7 +24,7 @@ const NavBar: FC<NavBarProps> = () => {
   };
 
   return (
-    <div className="topnav">
+    <div className="navbar">
       <div className="left-block">
         <Link to="/">
           <img src={pageLogo} alt="Logo" className="logo"></img>

@@ -23,7 +23,7 @@ function buildResponse(statusCode, body) {
 }
 
 function executeQuery(query, callback) {
-    con.query(query, function(err, result) {
+    con.query(query, function (err, result) {
         if (err) {
             console.error('Error executing MySQL query:', err);
             callback(err, buildResponse(500, { error: 'Error executing MySQL query:' }));
@@ -47,8 +47,11 @@ function handleGetTournament(tournamentID, callback) {
         JOIN Subscription ON Player.player_id = Subscription.player_id
         WHERE Subscription.tournament_id = '${tournamentID}';
     `;
-
-    const tournamentSql = `SELECT * FROM Tournament WHERE tournament_id='${tournamentID}'`;
+    const tournamentSql = `SELECT * FROM Tournament WHERE tournament_id='${tournamentID}';`;
+    const getSessionsInTournamentSql = `
+    SELECT *
+    FROM Session
+    WHERE tournament_id = '${tournamentID}';`;
 
     executeQuery(tournamentSql, (tournamentErr, tournamentResult) => {
         if (tournamentErr) {
@@ -60,16 +63,25 @@ function handleGetTournament(tournamentID, callback) {
                     callback(playerSubscriptionErr, buildResponse(500, { error: 'Error fetching player subscriptions' }));
                 }
                 else {
-                    const tournament = JSON.parse(tournamentResult.body);
-                    const playerSubscriptions = JSON.parse(playerSubscriptionResult.body);
+                    executeQuery(getSessionsInTournamentSql, (sessionsErr, sessionsResult) => {
+                        if (sessionsErr) {
+                            callback(getSessionsInTournamentSql, buildResponse(500, { error: 'Error fetching sessions' }));
+                        } else {
+                            const tournament = JSON.parse(tournamentResult.body);
+                            const playerSubscriptions = JSON.parse(playerSubscriptionResult.body);
+                            const sessions = JSON.parse(sessionsResult.body);
 
-                    const response = {
-                        tournament,
-                        playerSubscriptions
-                    };
-                    callback(null, buildResponse(200, response));
+                            const response = {
+                                tournament,
+                                playerSubscriptions,
+                                sessions
+                            };
+                            callback(null, buildResponse(200, response));
+                        }
+                    })
                 }
-            });
+            }
+            )
         }
     });
 }
@@ -131,7 +143,7 @@ function handleGetSession(tournamentID, sessionID, callback) {
     `;
 
     const makePlayerRankingSessionSQL = `
-        SELECT ps.player_id, p.player_nickname, SUM(ps.total_score) AS total_score
+        SELECT ps.player_id, p.player_nickname, SUM(ps.total_score) AS total_score, p.favourite_army
         FROM(
             SELECT player1_id AS player_id, player1_score AS total_score FROM Matches WHERE is_match_played = 1 AND session_id = '${sessionID}' AND tournament_id = '${tournamentID}'
             UNION ALL
@@ -170,6 +182,7 @@ function handleGetSession(tournamentID, sessionID, callback) {
 
 exports.handler = (event, context, callback) => {
     context.callbackWaitsForEmptyEventLoop = false;
+    console.log(event)
 
     switch (event.httpMethod) {
         case 'GET':
@@ -194,8 +207,9 @@ function handleGetRequest(event, callback) {
             handleGetTournaments(callback);
             break;
         case 'tournament':
+            console.log(pathSegments)
             const tournamentID = pathSegments[2];
-            if (pathSegments[3] === 'getSessionsInTournament') {
+            if (pathSegments[2] === 'sessions') {
                 const tID = event.query.tournamentID;
                 handleGetSessionsInTournament(tID, callback)
             }
