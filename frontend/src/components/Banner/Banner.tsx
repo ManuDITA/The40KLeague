@@ -144,7 +144,7 @@ function Banner(prop: any) {
 
   return (
 
-    <span >
+    < >
       {/*match?.score == undefined &&
         <></>
   */}
@@ -217,33 +217,33 @@ function Banner(prop: any) {
       {//if match has score and is not accepted, means that this player has to accept or refuse the modification
         (prop.canBeModified == true && match?.is_match_played == 0 && match?.match_score_acceptance != whatPlayerIsThisUser && match?.match_score_acceptance != 0) &&
         <>
-          <div>You have to approve this match!
+          <span>You have to approve this match!
             <button onClick={acceptMatch}>V</button>
             <button onClick={refuseMatch}>X</button>
-          </div>
+          </span>
         </>
       }
 
       {
         (prop.canBeModified == true && match?.is_match_played == 0 && match?.match_score_acceptance == 0 &&
-          <div>Anyone can edit this match
-            <button onClick={sendMatchScore}>Send Match Score</button>
-          </div>
+          <span>Anyone can edit this match
+            <button className='btn' onClick={sendMatchScore}>Send Match Score</button>
+          </span>
 
         )
       }
 
       {
         (prop.canBeModified == true && match?.is_match_played == 0 && match?.match_score_acceptance == whatPlayerIsThisUser &&
-          <div>Waiting for approval</div>)
+          <span>Waiting for approval</span>)
       }
 
       {
         (prop.canBeModified == true && match?.is_match_played == 1 && match?.match_score_acceptance != whatPlayerIsThisUser &&
-          <div>You approved this match</div>)
+          <span>You approved this match</span>)
       }
 
-    </span>
+    </>
   );
 }
 

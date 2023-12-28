@@ -65,14 +65,28 @@ const User = () => {
             </div>
 
             <div className="containerUser title boldBlue">
-                This session matches:
+                Matches waiting for approval:
             </div>
 
-            <span style={{ overflowX: 'auto' }}>
-                {matches != undefined && matches.map((m: Match) => (
-                    <Banner key={m.match_id} prop={m} canBeModified={true} />
+            <div style={{ whiteSpace: 'wrap', overflowX: 'auto' }}>
+                {matches?.map((m: Match) => (
+                    m.is_match_played==0 &&
+                <Banner key={m.match_id} prop={m} canBeModified={true} />
+                    
                 ))}
-            </span>
+            </div>
+
+            <div className="containerUser title boldBlue">
+                Past played matches:
+            </div>
+
+            <div style={{ whiteSpace: 'normal', overflowX: 'auto' }}>
+                {matches?.map((m: Match) => (
+                    m.is_match_played==1 &&
+                <Banner key={m.match_id} prop={m} canBeModified={false} />
+                    
+                ))}
+            </div>
 
 
         </div>

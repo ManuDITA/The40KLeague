@@ -36,7 +36,7 @@
 }
 
 .sessionImageInSession {
-    width: 60%;
+    width: 80%;
     max-height: 500px;
     object-fit: cover;
     opacity: 0.95;
@@ -88,6 +88,10 @@ th {
   overflow-x: auto;
 }
 
+
+.highlightColorTable{
+  background-color: #ffcece;
+}
 
 
 

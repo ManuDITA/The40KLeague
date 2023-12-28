@@ -9,12 +9,6 @@ import { Player } from '../../../../../../classes/Player';
 interface TournamentProps { }
 
 const Tournament: FC<TournamentProps> = () => {
-  const requestOptions = {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-  };
 
   const [tournamentInfo, setTournamentInfo] = useState<TournamentClass>();
   const [playerSubscriptions, setPlayerSubscriptions] = useState([]);
@@ -49,12 +43,20 @@ const Tournament: FC<TournamentProps> = () => {
   }
 
   return (
-    <div className='tournamentInfo'>
+    <div>
       <div className='boldBlue'>{tournamentInfo?.tournament_id.toUpperCase()}</div>
-      <img src='/src/assets/nes1/nes1-map.avif' alt="Map"></img>
-      <div className="description">{tournamentInfo?.description}</div>
+      <div className="tournamentInformation">
+        <div className="containerBox grid">
 
+          <img src='/src/assets/nes1/nes1-map.avif' alt="Map"></img>
+          <div className="text-center">
+            <div>{tournamentInfo?.description}</div>
+          </div>
+        </div>
+      </div>
+      
       <br></br>
+
       <div className="containerSessions">
         {tournamentSessions?.map((session: Session) => (
           <div className='singleSessionContainer'>
@@ -77,9 +79,6 @@ const Tournament: FC<TournamentProps> = () => {
             <tr className='tableRow'>
               <th>Player ID</th>
               <th>Nickname</th>
-              <th>Age</th>
-              <th>Email</th>
-              <th>Phone Number</th>
               <th>Favourite Army</th>
               <th>Has player payed</th>
               <th>Player points</th>
@@ -87,12 +86,9 @@ const Tournament: FC<TournamentProps> = () => {
           </thead>
           <tbody>
             {playerSubscriptions.map((player: Player, index) => (
-              <tr key={index}>
+              <tr key={index} >
                 <td>{player.player_id}</td>
                 <td>{player.player_nickname}</td>
-                <td>{player.player_age}</td>
-                <td>{player.player_email}</td>
-                <td>{player.player_phone_number}</td>
                 <td style={{ textAlign: 'center' }}><img src={"../../../public/factions/" + `${player.favourite_army}.png`} onError={(e) => {
                   e.target.src = "../../../public/factions/null.png"; // Provide the path to your default image
                 }} style={{ height: '70px' }}></img></td>

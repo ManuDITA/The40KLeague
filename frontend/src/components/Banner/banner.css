@@ -1,11 +1,11 @@
 .rectangle {
-
   display: inline-block;
-  background-color: transparent;
+  margin-right: 10px; /* Adjust the margin as needed */
   border: 1cm solid transparent;
   zoom: 50%;
   -moz-transform: scale(0.5);
 }
+
 
 .innerRectangle {
   

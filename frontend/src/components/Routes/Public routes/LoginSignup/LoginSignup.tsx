@@ -1,6 +1,7 @@
 import React, { FC, useContext, useState } from 'react';
 import { Amplify } from 'aws-amplify';
 import awsExports from '../../../../aws-exports';
+import '../../../../App.css'
 import { Auth } from 'aws-amplify';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../../../App';
@@ -153,7 +154,7 @@ const LoginSignup: FC = () => {
               <label>Password:</label>
               <input type="password" value={cognitoUser.password} onChange={(e) => changeCognitoUserParams('password', e.target.value)} />
             </div>
-            <button onClick={handleLogin}>Login</button>
+            <button className='btn btn-outline' onClick={handleLogin}>Login</button>
           </div>
         </div>
 
@@ -165,41 +166,47 @@ const LoginSignup: FC = () => {
                 <label>Username:</label>
                 <input
                   type="text"
+                  required
                   value={cognitoUser.username}
                   onChange={(e) => changeCognitoUserParams('username', e.target.value)}
                 />
                 <label>Password:</label>
                 <input
                   type="password"
+                  required
                   value={cognitoUser.password}
                   onChange={(e) => changeCognitoUserParams('password', e.target.value)}
                 />
                 <label>Email:</label>
                 <input
                   type="text"
+                  required
                   value={cognitoUser.email}
                   onChange={(e) => changeCognitoUserParams('email', e.target.value)}
                 />
                 <label>Phone Number:</label>
                 <input
                   type="text"
+                  required
                   value={cognitoUser.phone_number}
                   onChange={(e) => changeCognitoUserParams('phone_number', e.target.value)}
                 />
                 <label>Name:</label>
                 <input
                   type="text"
+                  required
                   value={cognitoUser.name}
                   onChange={(e) => changeCognitoUserParams('name', e.target.value)}
                 />
                 <label>Date:</label>
                 <input
                   type="date"
+                  required
                   value={cognitoUser.birthdate}
                   onChange={(e) => changeCognitoUserParams('birthdate', e.target.value)}
                 />
               </div>
-              <button onClick={handleSignUp}>Sign Up</button>
+              <button className='btn' onClick={handleSignUp}>Sign Up</button>
               <div>{errorMessage}</div>
             </>
           }
@@ -207,10 +214,12 @@ const LoginSignup: FC = () => {
           {isUserConfirmed === false && (
             <>
               <h2>Confirm Sign Up</h2>
+              <div>A confirmation code has been sent to: {cognitoUser.email}</div>
+              <br></br>
               <label>Confirmation Code:</label>
               <input type="text" value={confirmationCode} onChange={(e) => setConfirmationCode(e.target.value)} />
-              <button onClick={handleConfirmSignUp}>Confirm Sign Up</button>
-              <button onClick={() => Auth.resendSignUp(cognitoUser.username)}>Resend Sign Up</button>
+              <button className='btn' onClick={handleConfirmSignUp}>Confirm Sign Up</button>
+              <button className='btn' onClick={() => Auth.resendSignUp(cognitoUser.username)}>Resend Sign Up</button>
             </>
           )}
 

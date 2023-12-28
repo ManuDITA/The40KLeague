@@ -89,7 +89,7 @@ const SessionPage: FC<SessionPageProps> = () => {
           <div className='boldBlue'>
             DERNIERS RÉSULTATS :
           </div>
-          <div style={{ whiteSpace: 'nowrap', overflowX: 'auto' }}>
+          <div style={{ whiteSpace: 'wrap', overflowX: 'auto' }}>
             {mostRecentMatches.map((m: Match) => (
               <Banner key={m.match_id} prop={m} canBeModified={false}/>
             ))}

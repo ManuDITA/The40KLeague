@@ -20,6 +20,7 @@ import Profile from './components/Routes/Public routes/Profile/profile'
 import Tournaments from './components/Routes/Public routes/Tournament/Tournaments'
 import { Amplify } from 'aws-amplify'
 import awsExports from './aws-exports'
+import Matches from './components/Routes/Public routes/Match/matches'
 
 
 export const UserContext = React.createContext();
@@ -74,6 +75,7 @@ function App() {
           <Route path="/loginsignup" element={<LoginSignup />}></Route>
           <Route path="/logout" element={<Logout />}></Route>
           <Route path="/profile/:nickname" element={<Profile />}></Route>
+          <Route path="/match/:match_id" element={<Matches/>}></Route>
           {isUserAuthenticated && 
             <Route path="/dashboard" element={<User />}></Route>}
           <Route path="/*" element={<NotFound />}></Route>

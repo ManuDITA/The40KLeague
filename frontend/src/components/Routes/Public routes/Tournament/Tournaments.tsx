@@ -16,10 +16,10 @@ const Tournaments: FC<TournamentsProps> = () => {
         fetch(apiPaths.tournamentsAPIEndpoint + '/tournaments')
             .then((res) => res.json())
             .then((data) => {
-                console.log(data.tournaments);
+                console.log(data);
                 // Ensure data is an array before setting the state
                 if (Array.isArray(data as TournamentClass[])) {
-                    setTournaments(data.tournaments);
+                    setTournaments(data);
                 } else {
                     console.error('Received non-array data for tournaments:', data);
                 }
