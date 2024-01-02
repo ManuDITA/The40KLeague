@@ -26,65 +26,35 @@ const NavBar: FC<NavBarProps> = () => {
   };
 
   return (
-    <div className="navbar">
-      <div className="containerNavbar flexNavbar">
-        <div className='containerLinks'>
-          <Link to="/">
-            <img src={pageLogo} alt="Logo" className="logo"></img>
+    <nav className="bg-customBlue p-2 px-6 text-white top-0 w-full z-50">
+      <div className="flex mx-8 items-center justify-between">
+        <Link to={''} className="pt-2">
+          <img src={pageLogo} alt="logo" className="w-60" />
+        </Link>
+
+        <div className="hidden font-bold md:flex space-x-6">
+          <Link to={'/tournaments'} className='hover:underline hover:underline-offset-8'>
+            Tournaments
           </Link>
-        </div>
-        <div className='containerLinks '>
-          <Link style={{ color: 'inherit', textDecoration: 'inherit' }} to={'/tournament/nes1'} className='singleLinkNavbar dropdown'>
-            <div>
-              NES1
-            </div>
-            <div className="dropdown-content">
-              <Link to={'/tournament/nes1/session1'}>
-                Session 1
-              </Link>
-              <Link to={'/tournament/nes1/session2'}>
-                Session 2
-              </Link>
-              <Link to={'/tournament/nes1/session3'}>
-                Session 3
-              </Link>
-              <Link to={'/tournament/nes1/session4'}>
-                Session 4
-              </Link>
-            </div>
+          <Link to={'/nes1'} className='hover:underline hover:underline-offset-8'>
+            Matches
           </Link>
-          <Link style={{ color: 'inherit', textDecoration: 'inherit' }} to={'/tournaments'} className='singleLinkNavbar'>
-            <div >
-              Tournaments
-            </div>
+          <Link to={'/'} className='hover:underline hover:underline-offset-8'>
+            About Us
           </Link>
-          <Link style={{ color: 'inherit', textDecoration: 'inherit' }} to={'/tournament/nes1'} className='singleLinkNavbar'>
-            <div >
-              Actualites
-            </div>
-          </Link>
-          <Link style={{ color: 'inherit', textDecoration: 'inherit' }} to={'/tournament/nes1'} className='singleLinkNavbar'>
-            <div >
-              Qui sommes-nous
-            </div>
-          </Link>
-          <Link style={{ color: 'inherit', textDecoration: 'inherit' }} to={'/dashboard'} className='singleLinkNavbar'>
-            <div >
-              Dashboard
-            </div>
+          <Link to={'/dashboard'} className='hover:underline hover:underline-offset-8'>
+            Dashboard
           </Link>
           <div >
             {!isUserAuthenticated &&
-              <Link style={{ color: 'inherit', textDecoration: 'inherit' }} to={'/loginsignup'} className='singleLinkNavbar'>
-                <div className='singleLinkNavbar'>
-                  Login/SignUp
-                </div>
+              <Link to={'/loginsignup'} className='hover:underline hover:underline-offset-8'>
+                Login/SignUp
               </Link>
             }
             {isUserAuthenticated &&
 
-              <Link style={{ color: 'inherit', textDecoration: 'inherit' }} to={'/'} className='singleLinkNavbar'>
-                <div className='singleLinkNavbar' onClick={customSignout}>
+              <Link to={'/'} className='hover:underline hover:underline-offset-8'>
+                <div onClick={customSignout}>
                   Logout
                 </div>
               </Link>
@@ -94,9 +64,7 @@ const NavBar: FC<NavBarProps> = () => {
           </div>
         </div>
       </div>
-    </div>
-
-
+    </nav>
   );
 }
 

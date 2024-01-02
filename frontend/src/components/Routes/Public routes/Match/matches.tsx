@@ -24,22 +24,35 @@ const Matches: FC<MatchesProps> = () => {
 
 
     return (
-        <div>
+        <>
             {match != undefined &&
-                <div>
-                    {match?.player1_list}
-                    <Banner prop={match} canBeModified={false}  ></Banner>
+                <>
+                    <div className='text-center text-5xl font-bold text-customBlue pt-10'>Match {match?.match_id}</div>
+                    <div className='container grid grid-cols-3 grid-rows-2 justify-items-center mx-auto mb-16'>
+                        <img className='row-span-2 justify-self-end' src='/player_icon.avif'></img>
+                        <div className='row-span-1 self-end text-maxFont text-zinc-500 font-extrabold'>VS</div>
+                        <img className='row-span-2 justify-self-start' src='/player_icon.avif'></img>
 
-                    {match?.player2_list}
+                        <div className='col-start-2 self-center'>
+                            <Banner prop={match} canBeModified={false}  ></Banner>
+                        </div>
+                    </div>
 
-                    <h1 className="text-3xl font-bold underline">
-                        Hello world!
-                    </h1>
-                </div>
-
+                    <div className='boldBlue'>Listes:</div>
+                    <div className="container flex flex-row items-center mx-auto px-10">
+                        <div className='w-6/12 px-10'>
+                            <div>Attacker</div>
+                            <pre className='text-left text-red-500  h-80  overflow-scroll overflow-x-hidden border-1 border-black'>{match?.player1_list}</pre>
+                        </div>
+                        <div className="w-6/12 px-10">
+                            <div>Defender</div>
+                            <pre className='text-left text-blue-500 h-80  justify-self-start w-full col-start-3 overflow-scroll overflow-x-hidden border-1 border-black'>{match?.player2_list}</pre>
+                        </div>
+                    </div>
+                </>
 
             }
-        </div>
+        </>
     );
 }
 

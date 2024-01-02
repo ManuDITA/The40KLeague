@@ -44,7 +44,7 @@ const Tournament: FC<TournamentProps> = () => {
 
   return (
     <div>
-      <div className='boldBlue'>{tournamentInfo?.tournament_id.toUpperCase()}</div>
+      <div className='boldBlue my-3'>{tournamentInfo?.tournament_id.toUpperCase()}</div>
       <div className="tournamentInformation">
         <div className="containerBox grid">
 
@@ -54,22 +54,24 @@ const Tournament: FC<TournamentProps> = () => {
           </div>
         </div>
       </div>
-      
+
       <br></br>
 
-      <div className="containerSessions">
+      <div className="flex flex-col mt-24 md:flex-row md:flex-wrap justify-center px-6">
         {tournamentSessions?.map((session: Session) => (
-          <div className='singleSessionContainer'>
-
-            <div className={'boldBlue ' + (session.is_session_active ? 'boldRed' : '')} style={{ textAlign: 'center' }}>{session.session_id.toLocaleUpperCase()}</div>
+          <div className="flex flex-col items-center my-4 p-4 rounded-lg overflow-hidden">
+            <div className='text-2xl text-customBlue font-bold'>{session.session_id.toLocaleUpperCase()}</div>
             <Link key={session.session_id} to={`/tournament/${tournamentInfo?.tournament_id}/${session.session_id}`}>
-              <img className='sessionImage' src={session.session_image_location} />
+              <img className='object-cover w-80 h-60 hover:translate-y-1 flex-shrink-0' src={session.session_image_location} />
             </Link>
-            <div className='boldBlue sessionNameDescription'>{session.session_name.toLocaleUpperCase()}</div>
-            <div>Start {session.session_start_date}</div>
-            <div>End {session.session_end_date}</div>
+            <div className='text-customBlue font-bold text-wrap flex-grow'>{session.session_name.toLocaleUpperCase()}</div>
           </div>
         ))}
+      </div>
+
+
+      <div className="containerSessions">
+
       </div>
       <br></br>
       <div className='boldBlue'>PLAYER SUBSCRIPTIONS</div>
@@ -80,7 +82,7 @@ const Tournament: FC<TournamentProps> = () => {
               <th>Player ID</th>
               <th>Nickname</th>
               <th>Favourite Army</th>
-              <th>Has player payed</th>
+              <th>Has player paid</th>
               <th>Player points</th>
             </tr>
           </thead>
@@ -102,7 +104,7 @@ const Tournament: FC<TournamentProps> = () => {
           </tbody>
         </table>
       </div>
-    </div>
+    </div >
   );
 };
 

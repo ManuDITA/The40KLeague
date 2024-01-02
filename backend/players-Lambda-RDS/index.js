@@ -146,7 +146,7 @@ function insertScore(requestBody, callback) {
     let body = JSON.parse(requestBody)
     console.log(body)
     const query = `UPDATE Matches 
-    SET match_score_acceptance = ${body.match_score_acceptance}, player1_score = ${body.player1_score}, player2_score = ${body.player2_score}
+    SET match_score_acceptance = ${body.match_score_acceptance}, player1_score = ${body.player1_score}, player2_score = ${body.player2_score}, match_date = '${body.match_date}'
     WHERE match_id = ${body.match_id};`;
     executeQuery(query, callback);
 }

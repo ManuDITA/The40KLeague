@@ -25,6 +25,7 @@ const LoginSignup: FC = () => {
   const [isUserConfirmed, setIsUserConfirmed] = useState(true);
   const [errorMessage, setErrormessage] = useState('')
   const [isUserRegistered, setIsUserRegistered] = useState(false);
+  const [forgotPasswordEmail, setForgotPasswordEmail] = useState('');
   let tokenForApiRequest = '';
 
   const changeCognitoUserParams = (key: string, value: string) => {
@@ -48,6 +49,20 @@ const LoginSignup: FC = () => {
       setErrormessage(error.message)
     }
   };
+
+  const handleForgotPassword = async () => {
+    try {
+      const user = await Auth.forgotPassword(forgotPasswordEmail);
+      console.log('Forgot password request sent:', user);
+      setErrormessage('Forgot password request sent to' + user.codeDeliveryDetails.Destination )
+      // Handle successful forgot password request (show success message, etc.)
+    } catch (error) {
+      console.error('Error sending forgot password request:', error.message);
+      setErrormessage(error.message)
+      // Handle forgot password request error (show error message, etc.)
+    }
+
+  }
 
   const registerUserToDatabase = (userToRegister) => {
     fetch(apiPaths.playersAPIEndpoint + apiPaths.player, {
@@ -128,23 +143,29 @@ const LoginSignup: FC = () => {
       <div className="login-signup-container">
         {/* Tabs */}
         {isUserRegistered === false &&
-        <div className="tabs">
-          <div
-            className={`tab ${activeTab === 'login' ? 'active-tab' : ''}`}
-            onClick={() => switchTab('login')}
-          >
-            Login
+          <div className="tabs">
+            <div
+              className={`tab ${activeTab === 'login' ? 'active-tab' : ''}`}
+              onClick={() => switchTab('login')}
+            >
+              Login
+            </div>
+            <div
+              className={`tab ${activeTab === 'signup' ? 'active-tab' : ''}`}
+              onClick={() => switchTab('signup')}
+            >
+              Sign Up
+            </div>
           </div>
-          <div
-            className={`tab ${activeTab === 'signup' ? 'active-tab' : ''}`}
-            onClick={() => switchTab('signup')}
-          >
-            Sign Up
-          </div>
-        </div>
         }
         {/* Forms */}
         <div className="forms">
+          <div className={`form ${activeTab === 'forgotPassword' ? 'active' : ''}`}>
+            <label>Insert your account email:</label>
+            <input type="email" value={forgotPasswordEmail} onChange={(e) => setForgotPasswordEmail(e.target.value)} />
+            <button className='btn my-2 mx-auto' onClick={() => handleForgotPassword()}>Retrieve password</button>
+            <div>{errorMessage}</div>
+          </div>
           <div className={`form ${activeTab === 'login' ? 'active' : ''}`}>
             {/* Login Form */}
 
@@ -154,7 +175,11 @@ const LoginSignup: FC = () => {
               <label>Password:</label>
               <input type="password" value={cognitoUser.password} onChange={(e) => changeCognitoUserParams('password', e.target.value)} />
             </div>
-            <button className='btn btn-outline' onClick={handleLogin}>Login</button>
+            <div className='container flex flex-row mx-auto my-3'>
+              <button className='btn px-10' onClick={handleLogin}>Login</button>
+              <button className='btn px-10' onClick={() => {switchTab('forgotPassword')}}>Forgot password</button>
+            </div>
+            <div>{errorMessage}</div>
           </div>
         </div>
 
@@ -206,8 +231,10 @@ const LoginSignup: FC = () => {
                   onChange={(e) => changeCognitoUserParams('birthdate', e.target.value)}
                 />
               </div>
-              <button className='btn' onClick={handleSignUp}>Sign Up</button>
-              <div>{errorMessage}</div>
+              <div className='container flex flex-row mx-auto my-3'>
+                <button className='btn' onClick={handleSignUp}>Sign Up</button>
+              </div>
+              <div className='text-red-600'>{errorMessage}!</div>
             </>
           }
           {/* Confirmation Code Form, only showable when user has been registered */}
@@ -218,7 +245,7 @@ const LoginSignup: FC = () => {
               <br></br>
               <label>Confirmation Code:</label>
               <input type="text" value={confirmationCode} onChange={(e) => setConfirmationCode(e.target.value)} />
-              <button className='btn' onClick={handleConfirmSignUp}>Confirm Sign Up</button>
+              <button className='btn my-2' onClick={handleConfirmSignUp}>Confirm Sign Up</button>
               <button className='btn' onClick={() => Auth.resendSignUp(cognitoUser.username)}>Resend Sign Up</button>
             </>
           )}

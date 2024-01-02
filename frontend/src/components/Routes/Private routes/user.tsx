@@ -11,6 +11,9 @@ import Banner from "../../Banner/Banner";
 import { Match } from "../../../../../classes/match";
 import apiPaths from "../../../../../apiList";
 import { match } from "assert";
+import { Link } from "react-router-dom";
+
+import { IoHome } from "react-icons/io5";
 
 const User = () => {
     const { isUserAuthenticated, setIsUserAuthenticated, token, setToken } = useContext(UserContext)
@@ -59,20 +62,69 @@ const User = () => {
 
     return (
         <div>
-            <img src="/public/factions_backgrounds/Space Marines.jfif" className="userBackgroundImage"></img>
-            <div className="boldWhite txtOverImage">
-                {cognitoUser != undefined && cognitoUser.attributes.name} - {cognitoUser != undefined && cognitoUser.username}
+            <img src="/public/factions_backgrounds/Orks.jpg" className="overflow-hidden brightness-30 bg-cover bg-no-repeat w-screen max-h-screen object-cover object-top"></img>
+            <div className="absolute flex flex-col mx-auto items-center xl:flex-row top-32 left-0 right-0 px-32">
+                <section className="container flex mx-auto flex-row flex-nowrap items-center justify-center py-10 xl:justify-start">
+                    <img src="./user.png" className="w-1/6 h-1/4 rounded-full"></img>
+                    <section className=" flex flex-col text-left ">
+                        <div className="text-red-600 text-8xl font-sans font-medium italic">{cognitoUser != undefined && cognitoUser.username.toUpperCase()}</div>
+                        <div className="flex items-center text-gray-50 text-3xl font-bold whitespace-nowrap">{cognitoUser != undefined && cognitoUser.attributes.name},&emsp;<IoHome /> Italy</div>
+                    </section>
+
+                </section>
+
+                <section className="text-blue-50 w-full justify-end">
+                    <div className="text-center text-4xl text-blue-50 font-bold p-10">
+                        Battle stats
+                    </div>
+                    <table className="table-auto w-full border-collapse">
+                        <tr>
+                            <td className="text-left  text-blue-50 px-10 py-2 text-2xl border-y-0 font-medium">
+                                Winrate
+                            </td>
+                            <td className="text-right text-green-500 text-2xl border-y-0 font-medium">
+                                60%
+                            </td>
+                        </tr>
+                        <tr className="">
+                            <td className="text-left text-blue-50 px-10 py-2 text-2xl border-y-0 font-medium">
+                                Played games
+                            </td>
+                            <td className="text-right text-green-500 text-2xl border-y-0 font-medium">
+                                12
+                            </td>
+                        </tr>
+                        <tr className="">
+                            <td className="text-left text-blue-50 px-10 py-2 text-2xl border-y-0 font-medium">
+                                Played tournaments
+                            </td>
+                            <td className="text-right text-green-500 text-2xl border-y-0 font-medium">
+                                2
+                            </td>
+                        </tr>
+                        <tr className="">
+                            <td className="text-left text-blue-50 px-10 py-2 text-2xl border-y-0 font-medium">
+                                Average points per game
+                            </td>
+                            <td className="text-right text-green-500 text-2xl border-y-0 font-medium">
+                                10.3
+                            </td>
+                        </tr>
+                    </table>
+                </section>
+
+
             </div>
 
             <div className="containerUser title boldBlue">
                 Matches waiting for approval:
             </div>
 
-            <div style={{ whiteSpace: 'wrap', overflowX: 'auto' }}>
+            <div className="container flex flex-wrap items-center my-10 mx-auto">
                 {matches?.map((m: Match) => (
-                    m.is_match_played==0 &&
-                <Banner key={m.match_id} prop={m} canBeModified={true} />
-                    
+                    m.is_match_played == 0 &&
+                    <Banner key={m.match_id} prop={m} canBeModified={true} />
+
                 ))}
             </div>
 
@@ -80,11 +132,12 @@ const User = () => {
                 Past played matches:
             </div>
 
-            <div style={{ whiteSpace: 'normal', overflowX: 'auto' }}>
+            <div className="container flex flex-row flex-wrap items-center mx-auto">
                 {matches?.map((m: Match) => (
-                    m.is_match_played==1 &&
-                <Banner key={m.match_id} prop={m} canBeModified={false} />
-                    
+                    m.is_match_played == 1 &&
+                    <Link to={'/match/' + m.match_id} className='mx-5'>
+                        <Banner key={m.match_id} prop={m} canBeModified={false} />
+                    </Link>
                 ))}
             </div>
 

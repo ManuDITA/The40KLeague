@@ -17,12 +17,13 @@ function Banner(prop: any) {
 
 
   const [match, setMatch] = useState<Match | undefined>();
-  const [date, setDate] = useState<string | undefined>();
   const divRef = useRef<HTMLDivElement>(null);
 
   const [whatPlayerIsThisUser, setWhatPlayerIsThisUser] = useState<number>(0);
   const [player1_score, setPlayer1_score] = useState<number>();
   const [player2_score, setPlayer2_score] = useState<number>();
+  const [match_date_asString, setMatch_date_asString] = useState<string | undefined>();
+  const [date, setDate] = useState<string | undefined>();
 
   let user;
 
@@ -46,6 +47,19 @@ function Banner(prop: any) {
       getCurrentUser()
   }, [match])
 
+  useEffect(()=>{
+    if(match_date_asString != undefined){
+      const inputDate = new Date(match_date_asString);
+      setDate(`${inputDate.getFullYear()}-${inputDate.getMonth() + 1}-${inputDate.getDate()}`)
+    }
+
+  }, [match_date_asString])
+
+
+  useEffect(() => {
+    //console.log(date)
+  }, [date])
+
 
   async function getCurrentUser() {
     user = await Auth.currentUserPoolUser()
@@ -57,6 +71,7 @@ function Banner(prop: any) {
     }
   }
 
+  //Function triggered on acceptance of an already inserted match score by a player
   const acceptMatch = async () => {
     //set is_match_played to 1
     const requestBody = {
@@ -97,6 +112,7 @@ function Banner(prop: any) {
       })
   }
 
+  //Refuse the proposed changes
   const refuseMatch = async () => {
     //set match_score_acceptance to 0
     const requestBody = {
@@ -118,13 +134,15 @@ function Banner(prop: any) {
       })
   }
 
+  //Proposing a match score
   const sendMatchScore = async () => {
     //set match_score_acceptance to 0
     const requestBody = {
       match_id: match?.match_id,
       match_score_acceptance: whatPlayerIsThisUser,
       player1_score: player1_score,
-      player2_score: player2_score
+      player2_score: player2_score,
+      match_date: date
     };
 
     console.log('fetching ' + apiPaths.matchesAPIEndpoint + apiPaths.insertScore)
@@ -144,7 +162,7 @@ function Banner(prop: any) {
 
   return (
 
-    < >
+    <div className='my-5 bg-slate-100'>
       {/*match?.score == undefined &&
         <></>
   */}
@@ -169,9 +187,14 @@ function Banner(prop: any) {
           {
             //check if the match can be modified from current context and if a score has already been proposed
             (prop.canBeModified == false || match?.match_score_acceptance != 0) &&
-            <div className='score'>
-              {match?.player1_score != undefined && match.player1_score} - {match?.player2_score != undefined && match.player2_score}
-            </div>
+            <>
+              <div className='score'>
+                {match?.player1_score != undefined && match.player1_score} - {match?.player2_score != undefined && match.player2_score}
+              </div>
+              <div className='is_match_played'>
+                {match?.match_date}
+              </div>
+            </>
           }
 
 
@@ -180,14 +203,13 @@ function Banner(prop: any) {
             prop.canBeModified == true && match?.match_score_acceptance == 0 &&
             <div className='score'>
               <input className='inputScorePlayer1' type='number' value={player1_score} onChange={(e) => (setPlayer1_score(e.target.valueAsNumber))}></input> - <input className='inputScorePlayer1' type='number' value={player2_score} onChange={(e) => (setPlayer2_score(e.target.valueAsNumber))}></input>
+              <input className='is_match_played' style={{zoom: '100%'}} value={match_date_asString} type='date' onChange={(e) => (setMatch_date_asString(e.target.value))}></input>
             </div>
           }
           <div className='matchType'>
             {match?.game_code}
           </div>
-          <div className='is_match_played'>
-            {match?.match_date}
-          </div>
+
 
           <div className='player1_name'>
             {match?.player1_name}
@@ -217,33 +239,33 @@ function Banner(prop: any) {
       {//if match has score and is not accepted, means that this player has to accept or refuse the modification
         (prop.canBeModified == true && match?.is_match_played == 0 && match?.match_score_acceptance != whatPlayerIsThisUser && match?.match_score_acceptance != 0) &&
         <>
-          <span>You have to approve this match!
-            <button onClick={acceptMatch}>V</button>
-            <button onClick={refuseMatch}>X</button>
-          </span>
+          <div>You have to approve this match!
+            <button className='btn' onClick={acceptMatch}>V</button>
+            <button className='btn' onClick={refuseMatch}>X</button>
+          </div>
         </>
       }
 
       {
         (prop.canBeModified == true && match?.is_match_played == 0 && match?.match_score_acceptance == 0 &&
-          <span>Anyone can edit this match
+          <div>Anyone can edit this match
             <button className='btn' onClick={sendMatchScore}>Send Match Score</button>
-          </span>
+          </div>
 
         )
       }
 
       {
         (prop.canBeModified == true && match?.is_match_played == 0 && match?.match_score_acceptance == whatPlayerIsThisUser &&
-          <span>Waiting for approval</span>)
+          <div>Waiting for approval</div>)
       }
 
       {
         (prop.canBeModified == true && match?.is_match_played == 1 && match?.match_score_acceptance != whatPlayerIsThisUser &&
-          <span>You approved this match</span>)
+          <div>You approved this match</div>)
       }
 
-    </>
+    </div>
   );
 }
 

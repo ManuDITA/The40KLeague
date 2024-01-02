@@ -64,58 +64,62 @@ const SessionPage: FC<SessionPageProps> = () => {
   return (
     <>
       {session == undefined ? (
-        <div className='boldBlue'>LOADING</div>) : (
 
-        <div className='container'>
-          <div className='boldBlue'>
-            {session?.is_session_active === 1 ? (
-              <>
-                <span>{session?.tournament_id.toUpperCase()} - {session?.session_id.toUpperCase()} - EN COURS</span>
-                <span className="video__icon">
-                  <div className="circle--outer"></div>
-                  <div className="circle--inner"></div>
-                </span>
-              </>
+        <div className='boldBlue my-5'>LOADING</div>) : (
+        <>
+          <div className="container flex flex-col items-center mx-auto">
+            <div className='boldBlue my-2'>
+              {session?.is_session_active === 1 ? (
+                <div>
+                  <span>{session?.tournament_id.toUpperCase()} - {session?.session_id.toUpperCase()} - EN COURS</span>
+                  <span className="video__icon">
+                    <div className="circle--outer"></div>
+                    <div className="circle--inner"></div>
+                  </span>
+                </div>
 
-            ) :
-              (
-                <div>{session?.tournament_id.toUpperCase()} - {session?.session_id.toUpperCase()} - TERMINÉE</div>)}
-          </div>
-          <div className='sessionImageText'>
-            <img src={session?.session_image_location} className='sessionImageInSession'></img>
+              ) :
+                (
+                  <div>{session?.tournament_id.toUpperCase()} - {session?.session_id.toUpperCase()} - TERMINÉE</div>)}
+            </div>
+            <img src={session?.session_image_location} className='w-full h-80 object-cover'></img>
             <div className='sessionName'> {session?.session_name} </div>
           </div>
 
           <div className='boldBlue'>
             DERNIERS RÉSULTATS :
           </div>
-          <div style={{ whiteSpace: 'wrap', overflowX: 'auto' }}>
+          <div className='flex flex-row justify-start overflow-scroll xl:justify-center xl:overflow-visible xl:flex-wrap overflow-y-hidden'>
             {mostRecentMatches.map((m: Match) => (
-              <Banner key={m.match_id} prop={m} canBeModified={false}/>
+              <Link to={'/match/' + m.match_id} className='mx-5'>
+                <Banner key={m.match_id} prop={m} canBeModified={false} />
+              </Link>
             ))}
           </div>
 
           <br></br>
 
 
-          <Link to='/tournament/nes1'>
-            <img className='seasonImage' src="/session/pairings-image.avif" />
-          </Link>
-          <Link to='/tournament/nes1'>
-            <img className='seasonImage' src="/session/allgames-image.avif" />
-          </Link>
-          <Link to='/tournament/nes1'>
-            <img className='seasonImage' src="/session/sportmanship-image.avif" />
-          </Link>
-          <Link to='/tournament/nes1'>
-            <img className='seasonImage' src="/session/seasonranking-image.avif" />
-          </Link>
+          <div className='container flex flex-row mx-auto items-center justify-around p-10'>
+            <Link to='/tournament/nes1'>
+              <img className='seasonImage' src="/session/pairings-image.avif" />
+            </Link>
+            <Link to='/tournament/nes1'>
+              <img className='seasonImage' src="/session/allgames-image.avif" />
+            </Link>
+            <Link to='/tournament/nes1'>
+              <img className='seasonImage' src="/session/sportmanship-image.avif" />
+            </Link>
+            <Link to='/tournament/nes1'>
+              <img className='seasonImage' src="/session/seasonranking-image.avif" />
+            </Link>
+          </div>
 
           <div className='boldBlue'>CLASSEMENT</div>
           <div className='myTableContainer'>
             <table>
               <thead>
-                <tr  className='tableRow'>
+                <tr className='tableRow'>
                   <th>RANK</th>
                   <th>NICKNAME</th>
                   <th>FACTION</th>
@@ -126,12 +130,12 @@ const SessionPage: FC<SessionPageProps> = () => {
                 </tr>
               </thead>
               <tbody>
-                {players != undefined && players.map((p:Player, index) => {
+                {players != undefined && players.map((p: Player, index) => {
                   return (
                     <tr key={index}>
                       <td>{index + 1}</td>
                       <td>{p.player_nickname}</td>
-                      <td style={{ textAlign: 'center' }}><img src={"../../../public/factions/" + `${p.favourite_army}.png`}  style={{height: '70px'}}></img></td>
+                      <td style={{ textAlign: 'center' }}><img src={"../../../public/factions/" + `${p.favourite_army}.png`} style={{ height: '70px' }}></img></td>
                       <td>{ }</td>
                       <td>{ }</td>
                       <td>{p.total_score}</td>
@@ -144,8 +148,7 @@ const SessionPage: FC<SessionPageProps> = () => {
               </tbody>
             </table>
           </div>
-
-        </div>
+        </>
 
 
       )}
