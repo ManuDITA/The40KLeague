@@ -6,6 +6,9 @@ const apiPaths = {
     getSessionsInTournament: '/tournament/sessions',
     getMatchesInSession: '/tournament/getMatchesInSession',
     player: '/player', // /player_nickname
+    getPlayerEnrolledTournaments: '/enrolledTournaments',
+
+
     acceptMatch: '/acceptMatch',
     refuseMatch: '/refuseMatch',
     insertScore: '/insertScore',

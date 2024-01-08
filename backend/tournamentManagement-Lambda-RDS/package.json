@@ -1,0 +1,14 @@
+{
+  "name": "tournmanagement",
+  "version": "1.0.0",
+  "description": "API for managing the creation of a tournament",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mysql": "^2.18.1"
+  }
+}

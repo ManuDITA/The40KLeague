@@ -63,7 +63,7 @@ function handleGetRequest(event, callback) {
     switch (pathSegments[1]) {
         case 'player':
             const player_nickname = pathSegments[2];
-            getAllPlayerMatches(player_nickname, callback)
+            getPlayerInfo(player_nickname, callback)
             break;
         case 'match':
             const match_id = pathSegments[2];
@@ -107,9 +107,9 @@ function handlePatchRequest(event, callback) {
 
 }
 
-function getAllPlayerMatches(player_nickname, callback) {
+function getPlayerInfo(player_nickname, callback) {
 
-    const query = `SELECT DISTINCT M.*
+    const playerMatchesSQL = `SELECT DISTINCT M.*
     FROM Matches M
     JOIN Session S ON M.session_id = S.session_id
     JOIN Tournament T ON M.tournament_id = T.tournament_id
@@ -117,7 +117,40 @@ function getAllPlayerMatches(player_nickname, callback) {
     WHERE P.player_nickname = '${player_nickname}';    
     `;
 
-    executeQuery(query, callback);
+    const enrolledTournaments = `
+    SELECT Subscription.*, Tournament.*, Player.*
+    FROM Subscription
+    JOIN Tournament ON Subscription.tournament_id = Tournament.tournament_id
+    JOIN Player ON Subscription.player_id = Player.player_id
+    WHERE Player.player_nickname = '${player_nickname}';    
+    `;
+
+    executeQuery(enrolledTournaments, (enrolledTournamentsErr, enrolledTournamentsResult) => {
+        if (enrolledTournamentsErr) {
+            callback(enrolledTournamentsErr, buildResponse(500, { error: 'Error fetching tournament subscriptions' }));
+        }
+        else {
+            const tournaments = JSON.parse(enrolledTournamentsResult.body);
+
+            // Fetch player ranking for the specified session
+            executeQuery(playerMatchesSQL, (playerMatchesErr, playerMatchesRes) => {
+                if (playerMatchesErr) {
+                    callback(playerMatchesErr, buildResponse(500, { error: 'Error fetching player matches' }));
+                }
+                else {
+                    const matches = JSON.parse(playerMatchesRes.body);
+
+                    // Combine the results and send the response
+                    const response = {
+                        tournaments,
+                        matches
+                    };
+                    callback(null, buildResponse(200, response));
+                }
+            });
+        }
+    });
+
 }
 
 function handlePostRequest(event, callback) {

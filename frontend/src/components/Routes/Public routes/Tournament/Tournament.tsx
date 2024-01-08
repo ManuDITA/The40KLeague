@@ -6,6 +6,11 @@ import { TournamentClass } from '../../../../../../classes/TournamentClass';
 import apiPaths from '../../../../../../apiList';
 import { Player } from '../../../../../../classes/Player';
 
+import { TbSortAscendingNumbers } from "react-icons/tb";
+import { GiReceiveMoney } from "react-icons/gi";
+import { IoMdPricetags } from "react-icons/io";
+
+
 interface TournamentProps { }
 
 const Tournament: FC<TournamentProps> = () => {
@@ -13,6 +18,10 @@ const Tournament: FC<TournamentProps> = () => {
   const [tournamentInfo, setTournamentInfo] = useState<TournamentClass>();
   const [playerSubscriptions, setPlayerSubscriptions] = useState([]);
   const [tournamentSessions, setTournamentSessions] = useState<Session[]>([]);
+
+  const [isEnrollmentPeriod, setIsEnrollmentPeriod] = useState(false);
+  const [isPlayingPeriod, setIsPlayingPeriod] = useState(false);
+  const [isEndingPeriod, setIsEndingPeriod] = useState(false);
 
   useEffect(() => {
     fetch(apiPaths.tournamentsAPIEndpoint + window.location.pathname)
@@ -28,6 +37,18 @@ const Tournament: FC<TournamentProps> = () => {
 
     //getSessionsInTournament('nes1')
   }, []);
+
+  useEffect(() => {
+    if (tournamentInfo) {
+      let today = new Date();
+      if (today < new Date(tournamentInfo.start_date))
+        setIsEnrollmentPeriod(true)
+      else if (today < new Date(tournamentInfo.end_date))
+        setIsPlayingPeriod(true)
+      else if (today > new Date(tournamentInfo.end_date))
+        setIsEndingPeriod(true)
+    }
+  }, [tournamentInfo])
 
   function getSessionsInTournament(tournamentID: string) {
     console.log('fetching: ' + apiPaths.tournamentsAPIEndpoint + apiPaths.getSessionsInTournament + `?tournamentID=${tournamentID}`)
@@ -45,17 +66,73 @@ const Tournament: FC<TournamentProps> = () => {
   return (
     <div>
       <div className='boldBlue my-3'>{tournamentInfo?.tournament_id.toUpperCase()}</div>
-      <div className="tournamentInformation">
-        <div className="containerBox grid">
-
-          <img src='/src/assets/nes1/nes1-map.avif' alt="Map"></img>
-          <div className="text-center">
-            <div>{tournamentInfo?.description}</div>
+      <div className="container w- pb-16 flex flex-col xl:flex-row xl:items-center justify-evenly mx-auto  text-center">
+        <img src='/src/assets/nes1/nes1-map.avif' alt="Map" className='mx-10 mt-10 w-2/4 xl:w-1/3 xl:max-h-48 object-contain'></img>
+        <div className="text-center mx-10 mt-10 xl:w-1/3">
+          <div>{tournamentInfo?.description}</div>
+        </div>
+        <div className='mx-10 mt-10 xl:w-1/3'>
+          <div className=' text-3xl pb-2'>
+            Tournament status
+          </div>
+          <div>
+            <table className='items-center w-full text-white border-gray-600 border-2 bg-cyan-400'>
+              <tr className=''>
+                <div className={`py-3  ${isEnrollmentPeriod ? "text-white bg-customRed " : 'bg-white text-black'}`}>
+                  Registration open
+                </div>
+              </tr>
+              <tr className=''>
+                <div className={`py-3 ${isPlayingPeriod ? "text-white bg-customRed " : 'bg-white text-black'} `}>
+                  Playing
+                </div>
+              </tr>
+              <tr className=''>
+                <div className={`py-3  ${isEndingPeriod ? "text-white bg-customRed " : 'bg-white text-black'}`}>
+                  Finished
+                </div>
+              </tr>
+            </table>
           </div>
         </div>
       </div>
 
-      <br></br>
+      <div className='container flex flex-row mx-auto items-start justify-evenly'>
+        <div className=''>
+          <div className='text-neutral-700'>
+            <div className='text-7xl'>
+              <GiReceiveMoney />
+            </div>
+            Cost
+          </div>
+          <div className='text-6xl text-red-700'>
+            {tournamentInfo?.entry_cost}€
+          </div>
+        </div>
+        <div>
+          <div className='text-neutral-700'>
+            <div className=' text-7xl'>
+              <IoMdPricetags />
+            </div>
+            Tags
+          </div>
+          <div className='text-6xl text-red-700'>
+            
+          </div>
+
+        </div>
+        <div>
+          <div className='text-neutral-700'>
+            <div className=' text-7xl'>
+              <TbSortAscendingNumbers />
+            </div>
+            Sessions
+          </div>
+          <div className='text-6xl text-red-700'>
+            {tournamentInfo?.number_of_sessions}
+          </div>
+        </div>
+      </div>
 
       <div className="flex flex-col mt-24 md:flex-row md:flex-wrap justify-center px-6">
         {tournamentSessions?.map((session: Session) => (

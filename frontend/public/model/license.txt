@@ -1,0 +1,11 @@
+Model Information:
+* title:	Warhammer 40k Bolt Rifle
+* source:	https://sketchfab.com/3d-models/warhammer-40k-bolt-rifle-7c21126db3274a44a818467f8c004a9f
+* author:	Eriodas (https://sketchfab.com/serafindehielo)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Warhammer 40k Bolt Rifle" (https://sketchfab.com/3d-models/warhammer-40k-bolt-rifle-7c21126db3274a44a818467f8c004a9f) by Eriodas (https://sketchfab.com/serafindehielo) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
