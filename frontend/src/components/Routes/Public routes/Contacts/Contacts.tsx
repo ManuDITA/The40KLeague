@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'; // Add this import statement for React
 import User from '../../Private routes/user';
 import { Auth } from 'aws-amplify'
+import Trapezoid from '../../../Trapezoid/trapezoid';
+import UserTopDiv from '../../../UserTopDiv/userTopDiv';
 
 function Contacts() {
 
@@ -30,8 +32,8 @@ function Contacts() {
 
   return (
     <div>
-      <h1>Hello</h1>
-      {outputString}
+      <Trapezoid></Trapezoid>
+      <UserTopDiv></UserTopDiv>
     </div>
   );
 }

@@ -6,6 +6,8 @@ const apiPaths = {
     getSessionsInTournament: '/tournament/sessions',
     getMatchesInSession: '/tournament/getMatchesInSession',
     player: '/player', // /player_nickname
+
+    createPlayer: '/createPlayer',
     getPlayerEnrolledTournaments: '/enrolledTournaments',
 
 
@@ -16,5 +18,9 @@ const apiPaths = {
   
 
   }
+
+const listPaths = {
+  getList: '/addlist'
+}
 
 export default apiPaths;

@@ -61,25 +61,9 @@ function handleGetRequest(event, callback) {
     const pathSegments = event.path.split('/');
     console.log(pathSegments)
     switch (pathSegments[1]) {
-        case 'player':
-            if (pathSegments[3] == undefined) {
-                const player_nickname = pathSegments[2];
+        case 'lists':
+            const player_nickname = pathSegments[2];
                 getPlayerInfo(player_nickname, callback);
-            }else{
-                switch (pathSegments[3]){
-                    case 'lists':
-                        getPlayerLists(1, callback);
-                        break;
-                    
-                    default:
-                        break;
-                }
-
-            }
-            break;
-        case 'match':
-            const match_id = pathSegments[2];
-            getMatch(match_id, callback);
             break;
         default:
             callback(null, buildResponse(400, { error: 'Path is wrong' }));
@@ -166,23 +150,7 @@ function getPlayerInfo(player_nickname, callback) {
 }
 
 function handlePostRequest(event, callback) {
-    console.log('Handling post requests')
-    const pathSegments = event.path.split('/');
-    console.log(pathSegments)
-    if (pathSegments[2] == undefined) {
-        //create a player
-        console.log('Handling post player info')
-        postPlayerInformation(event.body, callback)
-    }
-    switch (pathSegments[3]) {
-        case 'list':
-            console.log('Handling post list request')
-            //adding a list to the player list database
-            postList(event.body, callback)
-            break;
-        default:
-
-    }
+    postPlayerInformation(event.body, callback)
 }
 
 function acceptMatch(requestBody, callback) {
@@ -216,13 +184,6 @@ function getPlayerLists(player_id, callback) {
     const query = `SELECT *
     FROM Lists 
     WHERE player_id = '${player_id}';`;
-    executeQuery(query, callback);
-}
-
-function postList(passedBody, callback) {
-    let body = JSON.parse(passedBody)
-    console.log(body)
-    const query = `INSERT INTO Lists (player_id, list_description, list_army, list_name, is_archived, list_points) VALUES (1, '${body.list_description}', '${body.list_army}', '${body.list_name}', 0, ${body.list_points});`;
     executeQuery(query, callback);
 }
 

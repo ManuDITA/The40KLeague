@@ -1,7 +1,7 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import React, { useContext, useEffect, useState } from "react";
 
-import { UserContext } from "../../../App";
+import { CognitoUserContext, isUserAuthenticatedContext } from "../../../App";
 import { Auth } from "aws-amplify";
 import { UserClass } from "../../../../../classes/UserClass";
 
@@ -16,47 +16,36 @@ import { Link } from "react-router-dom";
 import { IoHome } from "react-icons/io5";
 import { Player } from "../../../../../classes/Player";
 import ThreeJsComponent from "../../3D Viewer/3dviewer";
+import Trapezoid from "../../Trapezoid/trapezoid";
+import MyLists from "./mylists";
+import { TournamentClass } from "../../../../../classes/TournamentClass";
 
 
 const User = () => {
-    const { isUserAuthenticated, setIsUserAuthenticated, token, setToken } = useContext(UserContext)
-    const [cognitoUser, setCognitoUser] = useState();
+    const { isUserAuthenticated, setIsUserAuthenticated } = useContext(isUserAuthenticatedContext)
+    const {cognitoUser, setCognitoUser} = useContext(CognitoUserContext)
+
+
+    //const [cognitoUser, setCognitoUser] = useState();
     const [player, setPlayer] = useState<Player>()
     const [matches, setMatches] = useState<Match[] | undefined>()
     const [enrolledTournaments, setEnrolledTournaments] = useState()
 
 
     useEffect(() => {
-        console.log('is user authenticated: ', isUserAuthenticated)
-        getUserInfo()
-    }, [isUserAuthenticated])
-
-    useEffect(() => {
         if (cognitoUser != undefined) {
-            console.log('Logged user: ', cognitoUser)
             //getUserEnrolledTournaments()
             getUserMatches()
         }
     }, [cognitoUser])
 
 
-    async function getUserInfo() {
-        setCognitoUser(await Auth.currentUserPoolUser());
-
-        const session = await Auth.currentSession();
-        const receivedToken = session.getIdToken().getJwtToken();
-
-        setToken(receivedToken)
-
-    }
-
     async function getUserMatches() {
-        console.log('fetching ' + apiPaths.playersAPIEndpoint + apiPaths.player + '/' + cognitoUser.username)
-        console.log(token)
+        console.log('fetching ' + apiPaths.player + '/' + cognitoUser.username)
         await fetch(apiPaths.playersAPIEndpoint + apiPaths.player + '/' + cognitoUser.username, {
             method: 'GET',
             headers: {
-                'Authorization': token
+                'Authorization': cognitoUser.signInUserSession.idToken.jwtToken
             }
         }
         ).then((res) => (res.json()))
@@ -91,7 +80,7 @@ const User = () => {
 
     return (
         <>
-            {player !== undefined && enrolledTournaments !== undefined &&
+            {cognitoUser && player !== undefined && enrolledTournaments !== undefined &&
                 <div>
                     <img src={`/public/factions_backgrounds/${player.favourite_army}.png`} className="overflow-hidden brightness-30 bg-cover bg-no-repeat w-screen max-h-screen object-cover object-top"></img>
                     <div className="absolute flex flex-col mx-auto items-center xl:flex-row top-32 left-0 right-0 px-32">
@@ -105,7 +94,7 @@ const User = () => {
                                     {player !== undefined && (
                                         <img
                                             className="invert ml-4 h-20"
-                                            src={`/public/factions/${player.favourite_army}.png`}
+                                            src={`/factions/${player.favourite_army}.png`}
                                             alt={`${player.favourite_army} faction`}
                                         />
                                     )}
@@ -115,12 +104,6 @@ const User = () => {
                                     <IoHome /> Italy
                                 </div>
                             </section>
-                            <div>
-
-                                <ThreeJsComponent />
-                            </div>
-
-
                         </section>
 
                         <section className="text-blue-50 w-full justify-end">
@@ -167,25 +150,14 @@ const User = () => {
 
                     </div>
 
-                    <div className="containerUser title boldBlue">
-                        Your battle lists
-                    </div>
-
-                    <div className="container flex flex-wrap items-center my-10 mx-auto bg-slate-400">
-                        {enrolledTournaments?.map((tournament: any) => (
-                            <div>
-
-                            </div>
-                        ))}
-                    </div>
 
                     <div className="containerUser title boldBlue">
                         Enrolled tournaments:
                     </div>
 
                     <div className="container flex flex-wrap items-center my-10 mx-auto bg-slate-400">
-                        {enrolledTournaments?.map((tournament: any) => (
-                            <div>
+                        {enrolledTournaments?.map((tournament: TournamentClass) => (
+                            <div key={tournament.tournament_id}>
                                 <Link to={'/tournament/' + tournament.tournament_id}>
                                     {tournament.tournament_id} -
                                     {tournament.max_player_count}
@@ -214,7 +186,7 @@ const User = () => {
                     <div className="container flex flex-row flex-wrap items-center mx-auto">
                         {matches?.map((m: Match) => (
                             m.is_match_played == 1 &&
-                            <Link to={'/match/' + m.match_id} className='mx-5'>
+                            <Link to={'/match/' + m.match_id} className='mx-5' key={m.match_id}>
                                 <Banner key={m.match_id} prop={m} canBeModified={false} />
                             </Link>
                         ))}

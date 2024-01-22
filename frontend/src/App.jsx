@@ -14,6 +14,7 @@ import User from './components/Routes/Private routes/user'
 import React from 'react'
 import Logout from './components/Routes/Public routes/LoginSignup/Logout'
 import Tournament from './components/Routes/Public routes/Tournament/Tournament'
+import PlayerDashboard from './components/Routes/Private routes/playerdashboard'
 
 import { Auth } from 'aws-amplify';
 import Profile from './components/Routes/Public routes/Profile/profile'
@@ -21,11 +22,14 @@ import Tournaments from './components/Routes/Public routes/Tournament/Tournament
 import { Amplify } from 'aws-amplify'
 import awsExports from './aws-exports'
 import Matches from './components/Routes/Public routes/Match/matches'
+import MyLists from './components/Routes/Private routes/mylists'
+import NavBarTop from './components/NavBar/NavBarTop'
+import UserTopDiv from './components/UserTopDiv/userTopDiv'
 
+import {CognitoUser} from 'amazon-cognito-identity-js';
 
-export const UserContext = React.createContext();
-export const AuthContext = React.createContext();
-
+export const CognitoUserContext = React.createContext();
+export const isUserAuthenticatedContext = React.createContext();
 
 Amplify.configure({
   Auth: {
@@ -38,21 +42,30 @@ Amplify.configure({
 function App() {
 
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
-  const [token, setToken] = useState(undefined);
+  const [cognitoUser, setCognitoUser] = useState(null);
+  
 
   const getToken = async () => {
     const session = await Auth.currentSession();
     const receivedToken = session.getIdToken().getJwtToken();
 
     if (receivedToken != undefined) {
-      console.log("A user is logged in: ", session.accessToken.payload)
-      console.log("Token at app level: ", receivedToken)
       setIsUserAuthenticated(true)
-      setToken(receivedToken)
-    } else{
-      console.log("No token, user not logged into the website")
-      console.log(session)
+
+      Auth.currentUserPoolUser().then((user) => {
+        setIsUserAuthenticated(true);
+        console.log('Get current userpool user: ', user);
+        setCognitoUser(user);
+      }).catch((error) => {
+        console.error("User not logged into the website", error);
+        setIsUserAuthenticated(false);
+        setCognitoUser(null);
+      });
+
+    } else {
+      console.log("User not logged into the website")
       setIsUserAuthenticated(false)
+      setCognitoUser(null)
     }
   }
 
@@ -62,27 +75,42 @@ function App() {
 
   }, [])
 
+
   return (
     <>
-      <UserContext.Provider value={{ isUserAuthenticated: isUserAuthenticated, setIsUserAuthenticated: setIsUserAuthenticated, token: token, setToken: setToken }}>
-        <NavBar></NavBar>
-        <Routes>
-          <Route path="/" element={<Home />}></Route>
-          <Route path='/tournaments' element={<Tournaments />}></Route>
-          <Route path='/tournament/:tournamentID' element={<Tournament />}></Route>
-          <Route path="/tournament/:tournamentID/:sessionID" element={<SessionPage />}></Route>
-          <Route path="/contacts" element={<Contacts />}></Route>
-          <Route path="/loginsignup" element={<LoginSignup />}></Route>
-          <Route path="/logout" element={<Logout />}></Route>
-          <Route path="/profile/:nickname" element={<Profile />}></Route>
-          <Route path="/match/:match_id" element={<Matches/>}></Route>
-          {isUserAuthenticated && 
-            <Route path="/dashboard" element={<User />}></Route>}
-          <Route path="/*" element={<NotFound />}></Route>
-        </Routes>
+      <CognitoUserContext.Provider value={{ cognitoUser: cognitoUser, setCognitoUser: setCognitoUser }}>
+        <isUserAuthenticatedContext.Provider value={{ isUserAuthenticated: isUserAuthenticated, setIsUserAuthenticated: setIsUserAuthenticated }}>
 
-        <Footer></Footer>
-      </UserContext.Provider>
+          <NavBar></NavBar>
+          <UserTopDiv></UserTopDiv>
+          {
+            //match the following ml-24 to the width of the navbar; this applies a margin to the left so we have pages starting 24 units to the right of the navbar
+          }
+          <div className='xl:ml-24'>
+
+            <NavBarTop></NavBarTop>
+            <Routes>
+              <Route path="/" element={<Home />}></Route>
+              <Route path='/tournaments' element={<Tournaments />}></Route>
+              <Route path='/tournament/:tournamentID' element={<Tournament />}></Route>
+              <Route path="/tournament/:tournamentID/:sessionID" element={<SessionPage />}></Route>
+              <Route path="/contacts" element={<Contacts />}></Route>
+              <Route path="/loginsignup" element={<LoginSignup />}></Route>
+              <Route path="/logout" element={<Logout />}></Route>
+              <Route path="/profile/:nickname" element={<Profile />}></Route>
+              <Route path="/match/:match_id" element={<Matches />}></Route>
+              <Route path="/playerDashboard" element={<PlayerDashboard />}></Route>
+              <Route path="/myLists" element={<MyLists />}></Route>
+              {cognitoUser != undefined &&
+                <Route path="/dashboard" element={<User />}></Route>
+              }
+              <Route path="/*" element={<NotFound />}></Route>
+            </Routes>
+          </div>
+
+          <Footer></Footer>
+        </isUserAuthenticatedContext.Provider>
+      </CognitoUserContext.Provider>
     </>
   )
 }

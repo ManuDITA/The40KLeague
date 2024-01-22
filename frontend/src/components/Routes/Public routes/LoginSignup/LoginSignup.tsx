@@ -4,13 +4,13 @@ import awsExports from '../../../../aws-exports';
 import '../../../../App.css'
 import { Auth } from 'aws-amplify';
 import { useNavigate } from 'react-router-dom';
-import { UserContext } from '../../../../App';
+import { isUserAuthenticatedContext } from '../../../../App';
 import apiPaths from '../../../../../../apiList';
 import { CognitoUser } from '../../../../../../classes/CognitoUser';
 
 const LoginSignup: FC = () => {
   const navigate = useNavigate();
-  const { setIsUserAuthenticated, setToken } = useContext(UserContext);
+  const { isUserAuthenticated, setIsUserAuthenticated } = useContext(isUserAuthenticatedContext);
 
   const [cognitoUser, setCognitoUser] = useState<CognitoUser>({
     username: '',
@@ -42,7 +42,7 @@ const LoginSignup: FC = () => {
       // Handle successful login (update context, navigate, etc.)
       setIsUserAuthenticated(true);
       console.log((await Auth.currentSession()).getIdToken().getJwtToken())
-      navigate('/dashboard');
+      //navigate('/dashboard');
 
     } catch (error) {
       console.error('Error signing in:', error);
@@ -54,7 +54,7 @@ const LoginSignup: FC = () => {
     try {
       const user = await Auth.forgotPassword(forgotPasswordEmail);
       console.log('Forgot password request sent:', user);
-      setErrormessage('Forgot password request sent to' + user.codeDeliveryDetails.Destination )
+      setErrormessage('Forgot password request sent to' + user.codeDeliveryDetails.Destination)
       // Handle successful forgot password request (show success message, etc.)
     } catch (error) {
       console.error('Error sending forgot password request:', error.message);
@@ -65,7 +65,7 @@ const LoginSignup: FC = () => {
   }
 
   const registerUserToDatabase = (userToRegister) => {
-    fetch(apiPaths.playersAPIEndpoint + apiPaths.player, {
+    fetch(apiPaths.playersAPIEndpoint + apiPaths.player + apiPaths.createPlayer, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -105,7 +105,7 @@ const LoginSignup: FC = () => {
           email: cognitoUser.email,
           phone_number: cognitoUser.phone_number,
           name: cognitoUser.name,
-          birthdate: cognitoUser.birthdate,
+          birthdate: cognitoUser.birthdate
         },
       });
 
@@ -123,7 +123,6 @@ const LoginSignup: FC = () => {
     try {
       await Auth.signOut();
       setIsUserAuthenticated(false);
-      setToken('');
       navigate('/');
     } catch (error) {
       console.error('Error signing out:', error);
@@ -139,7 +138,6 @@ const LoginSignup: FC = () => {
 
 
   return (
-    <div>
       <div className="login-signup-container">
         {/* Tabs */}
         {isUserRegistered === false &&
@@ -177,7 +175,7 @@ const LoginSignup: FC = () => {
             </div>
             <div className='container flex flex-row mx-auto my-3'>
               <button className='btn px-10' onClick={handleLogin}>Login</button>
-              <button className='btn px-10' onClick={() => {switchTab('forgotPassword')}}>Forgot password</button>
+              <button className='btn px-10' onClick={() => { switchTab('forgotPassword') }}>Forgot password</button>
             </div>
             <div>{errorMessage}</div>
           </div>
@@ -216,14 +214,14 @@ const LoginSignup: FC = () => {
                   value={cognitoUser.phone_number}
                   onChange={(e) => changeCognitoUserParams('phone_number', e.target.value)}
                 />
-                <label>Name:</label>
+                <label>Name and Surname:</label>
                 <input
                   type="text"
                   required
                   value={cognitoUser.name}
                   onChange={(e) => changeCognitoUserParams('name', e.target.value)}
                 />
-                <label>Date:</label>
+                <label>Birthdate:</label>
                 <input
                   type="date"
                   required
@@ -253,7 +251,6 @@ const LoginSignup: FC = () => {
           {/* Logout Button */}
         </div>
       </div>
-    </div>
   );
 };
 

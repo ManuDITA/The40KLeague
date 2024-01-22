@@ -36,7 +36,7 @@ function Banner(prop: any) {
     if (prop.prop.match_date == '1/1/1970') {
       prop.prop.match_date = 'N/A'
     }
-    console.log(prop.prop)
+    //console.log(prop.prop)
     setMatch(prop.prop);
 
 

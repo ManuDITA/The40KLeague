@@ -4,7 +4,7 @@ import './footer.css'
 interface FooterProps { }
 
 const Footer: FC<FooterProps> = () => (
-  <div className='footer'>
+  <div className='footer bottom-0'>
     <div className='column'>
       <div>
         FAQs

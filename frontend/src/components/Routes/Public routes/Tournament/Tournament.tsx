@@ -9,6 +9,8 @@ import { Player } from '../../../../../../classes/Player';
 import { TbSortAscendingNumbers } from "react-icons/tb";
 import { GiReceiveMoney } from "react-icons/gi";
 import { IoMdPricetags } from "react-icons/io";
+import { FaUsers } from "react-icons/fa";
+
 
 
 interface TournamentProps { }
@@ -65,7 +67,7 @@ const Tournament: FC<TournamentProps> = () => {
 
   return (
     <div>
-      <div className='boldBlue my-3'>{tournamentInfo?.tournament_id.toUpperCase()}</div>
+      <div className='boldBlue pt-10'>{tournamentInfo?.tournament_id.toUpperCase()}</div>
       <div className="container w- pb-16 flex flex-col xl:flex-row xl:items-center justify-evenly mx-auto  text-center">
         <img src='/src/assets/nes1/nes1-map.avif' alt="Map" className='mx-10 mt-10 w-2/4 xl:w-1/3 xl:max-h-48 object-contain'></img>
         <div className="text-center mx-10 mt-10 xl:w-1/3">
@@ -121,6 +123,20 @@ const Tournament: FC<TournamentProps> = () => {
           </div>
 
         </div>
+
+        <div>
+          <div className='text-neutral-700'>
+            <div className=' text-7xl'>
+              <FaUsers />
+            </div>
+            Players
+          </div>
+          <div className='text-6xl text-red-700'>
+            {tournamentInfo?.max_player_count}
+          </div>
+
+        </div>
+
         <div>
           <div className='text-neutral-700'>
             <div className=' text-7xl'>
