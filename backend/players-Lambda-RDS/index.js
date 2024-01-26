@@ -62,15 +62,18 @@ function handleGetRequest(event, callback) {
     console.log(pathSegments)
     switch (pathSegments[1]) {
         case 'player':
+            const player_nickname = pathSegments[2];
             if (pathSegments[3] == undefined) {
-                const player_nickname = pathSegments[2];
                 getPlayerInfo(player_nickname, callback);
-            }else{
-                switch (pathSegments[3]){
+            } else {
+                switch (pathSegments[3]) {
                     case 'lists':
-                        getPlayerLists(1, callback);
+                        getPlayerLists(player_nickname, callback);
                         break;
-                    
+
+                    case 'id':
+                        getPlayerId(player_nickname, callback);
+
                     default:
                         break;
                 }
@@ -92,7 +95,11 @@ function handleGetRequest(event, callback) {
 function getMatch(match_id, callback) {
     const query = `SELECT * FROM Matches WHERE match_id = ${match_id};`;
     executeQuery(query, callback);
+}
 
+function getPlayerId(player_nickname, callback){
+    const query = `SELECT Player.player_id FROM Player WHERE player_nickname = '${player_nickname}';`;
+    executeQuery(query, callback);
 }
 
 function handlePatchRequest(event, callback) {
@@ -185,13 +192,65 @@ function handlePostRequest(event, callback) {
     }
 }
 
-function acceptMatch(requestBody, callback) {
-    let body = JSON.parse(requestBody)
-    console.log(body)
+function executeQueriesInParallel(queries) {
+    return Promise.all(queries.map(query => {
+        return new Promise((resolve, reject) => {
+            con.query(query, (err, result) => {
+                if (err) {
+                    console.error('Error executing MySQL query:', err);
+                    reject(err);
+                } else {
+                    console.log('MySQL query result:', result);
+                    resolve(result);
+                }
+            });
+        });
+    }));
+}
+
+function updatePlayerScore(tournamentId, playerId, newScore) {
+    const query = `UPDATE Subscription
+                   SET player_points = player_points + ${newScore}
+                   WHERE tournament_id = '${tournamentId}'
+                   AND player_id = ${playerId};`;
+
+                   console.log('Updating player score:' , query)
+
+    return query;
+}
+
+function updateMatchStatus(matchId) {
     const query = `UPDATE Matches 
-    SET is_match_played = 1
-    WHERE match_id = ${body.match_id};`;
-    executeQuery(query, callback);
+                   SET is_match_played = 1
+                   WHERE match_id = ${matchId};`;
+
+    return query;
+}
+
+function acceptMatch(requestBody, callback) {
+    let body = JSON.parse(requestBody);
+    console.log(body);
+
+    const tournamentId = body.tournament_id; // Replace with actual tournament ID
+    const player1Id = body.player1_id;
+    const player2Id = body.player2_id;
+    const matchId = body.match_id;
+    const player1_score = body.player1_score
+    const player2_score = body.player2_score
+
+    const queries = [
+        updatePlayerScore(tournamentId, player1Id, player1_score),
+        updatePlayerScore(tournamentId, player2Id, player2_score),
+        updateMatchStatus(matchId) // Add the match update query
+    ];
+
+    executeQueriesInParallel(queries)
+        .then(results => {
+            callback(null, buildResponse(200, results));
+        })
+        .catch(err => {
+            callback(err, buildResponse(500, { error: 'Error executing MySQL queries' }));
+        });
 }
 
 function refuseMatch(requestBody, callback) {
@@ -212,17 +271,18 @@ function insertScore(requestBody, callback) {
     executeQuery(query, callback);
 }
 
-function getPlayerLists(player_id, callback) {
-    const query = `SELECT *
-    FROM Lists 
-    WHERE player_id = '${player_id}';`;
+function getPlayerLists(player_nickname, callback) {
+    const query = `SELECT Lists.*
+    FROM Lists
+    JOIN Player ON Lists.player_id = Player.player_id
+    WHERE Player.player_nickname = '${player_nickname}';`;
     executeQuery(query, callback);
 }
 
 function postList(passedBody, callback) {
     let body = JSON.parse(passedBody)
     console.log(body)
-    const query = `INSERT INTO Lists (player_id, list_description, list_army, list_name, is_archived, list_points) VALUES (1, '${body.list_description}', '${body.list_army}', '${body.list_name}', 0, ${body.list_points});`;
+    const query = `INSERT INTO Lists (player_id, list_description, list_army, list_name, is_archived, list_points) VALUES (${body.player_id}, '${body.list_description}', '${body.list_army}', '${body.list_name}', 0, ${body.list_points});`;
     executeQuery(query, callback);
 }
 

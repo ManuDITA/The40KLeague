@@ -16,7 +16,6 @@ import { Link } from "react-router-dom";
 import { IoHome } from "react-icons/io5";
 import { Player } from "../../../../../classes/Player";
 import ThreeJsComponent from "../../3D Viewer/3dviewer";
-import Trapezoid from "../../Trapezoid/trapezoid";
 import MyLists from "./mylists";
 import { TournamentClass } from "../../../../../classes/TournamentClass";
 
@@ -28,6 +27,7 @@ const User = () => {
 
     //const [cognitoUser, setCognitoUser] = useState();
     const [player, setPlayer] = useState<Player>()
+    const [player_id, setPlayer_id] = useState<number | undefined>()
     const [matches, setMatches] = useState<Match[] | undefined>()
     const [enrolledTournaments, setEnrolledTournaments] = useState()
 
@@ -35,10 +35,24 @@ const User = () => {
     useEffect(() => {
         if (cognitoUser != undefined) {
             //getUserEnrolledTournaments()
+            getUserId()
             getUserMatches()
         }
     }, [cognitoUser])
 
+    async function getUserId() {
+        console.log('fetching user id')
+        fetch(apiPaths.playersAPIEndpoint + apiPaths.player + "/" + cognitoUser.username + '/id', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((res) => (res.json()))
+            .then((id) => {
+                console.log("User id: ", id[0].player_id)
+                setPlayer_id(id[0].player_id)
+            })
+    }
 
     async function getUserMatches() {
         console.log('fetching ' + apiPaths.player + '/' + cognitoUser.username)
@@ -52,10 +66,12 @@ const User = () => {
             .then((output) => {
                 console.log("Output: ", output)
                 let p: Player = {
-                    player_id: output.tournaments[0].player_id,
-                    player_nickname: output.tournaments[0].player_nickname,
-                    favourite_army: output.tournaments[0].favourite_army
+                    //FIXME: Change this ugly way for which we get the player_id nickname and favourite army
+                    player_id: player_id || undefined,
+                    player_nickname: cognitoUser.username,
+                    favourite_army: 'Orks'
                 }
+                console.log(p)
                 setPlayer(p)
                 setMatches(output.matches)
                 setEnrolledTournaments(output.tournaments)
@@ -151,7 +167,7 @@ const User = () => {
                     </div>
 
 
-                    <div className="containerUser title boldBlue">
+                    <div className="containerUser title green40k">
                         Enrolled tournaments:
                     </div>
 
@@ -167,7 +183,7 @@ const User = () => {
                     </div>
 
 
-                    <div className="containerUser title boldBlue">
+                    <div className="containerUser title green40k">
                         Matches waiting for approval:
                     </div>
 
@@ -179,7 +195,7 @@ const User = () => {
                         ))}
                     </div>
 
-                    <div className="containerUser title boldBlue">
+                    <div className="containerUser title green40k">
                         Past played matches:
                     </div>
 

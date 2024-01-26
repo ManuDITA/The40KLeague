@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react"
 import { Link } from "react-router-dom";
 import { CognitoUserContext, isUserAuthenticatedContext } from "../../../App";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { IoMdClose } from "react-icons/io";
 
 import { Lists } from '../../../../../classes/Lists.tsx'
 
@@ -29,6 +30,39 @@ const MyLists = (props) => {
     const { isUserAuthenticated, setIsUserAuthenticated } = useContext(isUserAuthenticatedContext)
 
     const [isUserCreatingNewList, setIsUserCreatingNewList] = useState(false)
+    const [selectedList, setSelectedList] = useState<Lists | undefined>();
+
+    const [opt1, setOpt1] = useState('ASD')
+
+
+    const [player_id, setPlayer_id] = useState<number | undefined>()
+
+    useEffect(() => {
+        if (cognitoUser != undefined) {
+
+            console.log('fetching user id for mylists')
+            fetch(apiPaths.playersAPIEndpoint + apiPaths.player + "/" + cognitoUser.username + '/id', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then((res) => (res.json()))
+                .then((id) => {
+                    console.log("User id: ", id[0].player_id)
+                    setPlayer_id(id[0].player_id)
+                })
+
+        }
+    }, [cognitoUser])
+
+
+    const handleListClick = (list) => {
+        setSelectedList(list);
+    };
+
+    const handleCloseModal = () => {
+        setSelectedList(undefined);
+    };
 
     async function getUserInfo() {
         setCognitoUser(await Auth.currentUserPoolUser());
@@ -55,33 +89,64 @@ const MyLists = (props) => {
         validationSchema,
         onSubmit: (values) => {
             // Handle form submission here
-            values.player_id = cognitoUser.username
+            values.player_id = player_id!
             createList(values as Lists)
             console.log(values);
         },
     });
 
     useEffect(() => {
-        if (cognitoUser != undefined) {
-            console.log('Logged user: ', cognitoUser)
-            //getUserEnrolledTournaments()
-            getUserLists()
-        }
-    }, [cognitoUser])
-
-
-    useEffect(() => {
         console.log('is user authenticated: ', isUserAuthenticated)
-        if(isUserAuthenticated == true){
+        if (isUserAuthenticated == true) {
             getUserLists()
             getUserInfo()
         }
     }, [isUserAuthenticated])
 
+    const [isOptionsVisible, setIsOptionsVisible] = useState(false);
+    const [optionsPosition, setOptionsPosition] = useState({ top: 0, left: 0 });
+
+    const handleOptionsClick = (event, listId) => {
+        // Prevent the click from triggering the handleCloseModal function
+        event.stopPropagation();
+
+        // Get the position of the click
+        const clickX = event.clientX;
+        const clickY = event.clientY;
+
+        // Get the scroll position
+        const scrollX = window.pageXOffset;
+        const scrollY = window.pageYOffset;
+        setOpt1(listId)
+        // Set the position for the options block
+        setOptionsPosition({ top: clickY + scrollY, left: clickX + scrollX });
+
+        // Toggle the visibility
+        setIsOptionsVisible(!isOptionsVisible);
+    };
+
+    // Add event listener on component mount
+    useEffect(() => {
+        document.addEventListener("click", handleDocumentClick);
+
+        // Cleanup the event listener on component unmount
+        return () => {
+            document.removeEventListener("click", handleDocumentClick);
+        };
+    }, [isOptionsVisible]);
+
+    const handleDocumentClick = (event) => {
+        // Close the options block if it's visible and the click is outside of it
+        if (isOptionsVisible && !event.target.closest(".options-block")) {
+            setIsOptionsVisible(false);
+        }
+    };
+
 
     function getUserLists() {
         console.log('fetching lists')
-        fetch(apiPaths.playersAPIEndpoint + apiPaths.player + "/" + 'danks' + '/lists', {
+        console.log(cognitoUser)
+        fetch(apiPaths.playersAPIEndpoint + apiPaths.player + "/" + cognitoUser.username + '/lists', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -98,6 +163,7 @@ const MyLists = (props) => {
     function createList(val: Lists) {
         console.log('Creating list')
         console.log(val)
+
         fetch('https://wwhlvoay4l.execute-api.eu-west-3.amazonaws.com/dev/player/' + cognitoUser.username + '/list', {
             method: 'POST',
             headers: {
@@ -118,15 +184,15 @@ const MyLists = (props) => {
             <div className='text-4xl pb-4 text-black'>
                 My army lists
             </div>
-            <button className="text-xl bg-blue-300 p-3 rounded-md border-blue-600 border-2 text-black" onClick={() => setIsUserCreatingNewList(true)}>Create new list</button>
-            <button className="text-xl bg-blue-300 p-3 rounded-md border-blue-600 border-2 text-black">Archived lists</button>
+            <button className="text-xl bg-green40k p-3 rounded-md text-white font-semibold m-2" onClick={() => setIsUserCreatingNewList(true)}>Create new list</button>
+            <button className="text-xl bg-green40k p-3 rounded-md text-white font-semibold m-2">Archived lists</button>
 
             {isUserCreatingNewList && cognitoUser.username != undefined &&
-                <div className="my-10 w-3/5 mx-auto bg-slate-300">
+                <div className="my-10 px-10 py-4 w-2/5 mx-auto bg-slate-300">
                     <form onSubmit={formik.handleSubmit} >
                         {/* Render your form inputs and submit button here */}
                         <div className="">
-                            <label className="w-2/5 mx-10 justify-items-start">Roaster Name</label>
+                            <label className="w-2/5">Roaster Name</label>
                             <input
                                 className="w-2/5"
                                 type="string"
@@ -166,7 +232,7 @@ const MyLists = (props) => {
                             <label>Points Limit</label>
                             <input
                                 type="number"
-                                className="w-4/5"
+                                className="w-2/5"
                                 name="list_points"
                                 value={formik.values.list_points}
                                 onChange={formik.handleChange}
@@ -182,6 +248,7 @@ const MyLists = (props) => {
                             <input
                                 type="checkbox"
                                 name="is_public"
+                                className="w-2/5"
                                 value={formik.values.is_public}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
@@ -193,9 +260,8 @@ const MyLists = (props) => {
 
                         <div>
                             <label>Description</label>
-                            <input
-                                className="w-4/5"
-                                type="text"
+                            <textarea
+                                className="w-2/5 bg-white"
                                 name="list_description"
                                 value={formik.values.list_description}
                                 onChange={formik.handleChange}
@@ -214,14 +280,14 @@ const MyLists = (props) => {
 
             <div className="flex flex-row w-full items-center flex-wrap">
                 {receivedLists != undefined && receivedLists?.map((list: any) => (
-                    <Link to={list.list_id} key={list.list_id}>
-                        <div className="w-96 relative h-36 bg-white border-2 rounded-xl border-black m-2 overflow-hidden">
-                            <div className="absolute top-0 left-0 w-auto text-2xl text-customBlue font-bold text-justify p-2 z-50">{list.list_name}</div>
+                    <div key={list.list_id} onClick={() => handleListClick(list)}>
+                        <div className="w-96 relative h-36 bg-white border-2 rounded-xl shadow-lg border-black mx-10 m-3 overflow-hidden hover:cursor-pointer">
+                            <div className="absolute top-0 left-0 w-auto text-2xl text-green40k font-bold text-justify p-2 z-40">{list.list_name}</div>
                             <div className="absolute bottom-0 left-0 flex flex-row items-end">
-                            
-                                <div className="bg-gray-400 py-1 px-2 m-2 rounded-xl font-semibold text-white">{list.list_points} Points</div>
+
+                                <div className="bg-black40klight py-1 px-2 m-2 rounded-xl font-semibold text-white">{list.list_points} Points</div>
                                 <img
-                                    className="px-4 z-20 pb-2 h-20"
+                                    className="px-4 max-w-36 z-20 pb-2 max-h-20"
                                     src={`/factions/${list.list_army}.png`}
                                     alt={`${list.list_army}`}
                                 />
@@ -229,8 +295,8 @@ const MyLists = (props) => {
 
                             <div className="absolute bottom-0 right-0 h-full">
                                 <img
-                                    className="w-56 z-50 object-center"
-                                    src={`/factions_backgrounds/Orks.png`}
+                                    className="w-56 z-40 object-center"
+                                    src={`/factions_backgrounds/custom-army.jpeg`}
                                     alt={`${list.list_army}`}
                                 />
 
@@ -238,18 +304,65 @@ const MyLists = (props) => {
                             </div>
 
                             <div className="absolute bottom-1/3 right-0 text-5xl">
-                                <BsThreeDotsVertical></BsThreeDotsVertical>
+                                <BsThreeDotsVertical onClick={(event) => handleOptionsClick(event, list.list_id)} />
                             </div>
 
                         </div>
-                    </Link>
+                    </div>
                 ))}
+
+
+                {/* Options block */}
+                {isOptionsVisible && (
+                    <div
+                        className=" absolute rounded-xl border-[2px] border-black40k z-50 options-block"
+                        style={{ top: optionsPosition.top, left: optionsPosition.left }}
+                    >
+                        {/* Add your options or buttons here */}
+                        <div className="bg-white40k text-black40k py-2 px-8 rounded-t-lg" onClick={() => console.log("Option 1 clicked for List ID:")}>Edit list</div>
+                        <div className="bg-red40k text-white40k py-2 px-8 rounded-b-lg" onClick={() => console.log("Option 2 clicked for List ID:")}>Remove list</div>
+                    </div>
+                )}
+
+                {/* Modal or overlay for displaying list details */}
+                {selectedList && (
+                    <div
+                        className="fixed top-0 z-50 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center"
+                        onClick={handleCloseModal}
+                    >
+
+                        <div className="relative bg-white p-4 rounded-md shadow-xl w-2/5 h-3/5 overflow-y-auto flex flex-col">
+                            {/* Render the details of the selected list here */}
+                            <button
+                                onClick={handleCloseModal}
+                                className="absolute top-0 right-0 text-4xl rounded-md border-black m-2 hover:cursor-pointer hover:bg-red40k hover:text-white40k"
+                            >
+                                <IoMdClose />
+                            </button>
+                            <div className="pb-2 flex flex-row justify-between items-center ">
+                                <img
+                                    className="h-20 mx-2"
+                                    src={`/factions/${selectedList.list_army}.png`}
+                                    alt={`${selectedList.list_army}`}
+                                />
+                                <p className="text-2xl overflow-visible font-bold flex-grow text-green40k font-arial-black">{selectedList.list_name}</p>
+
+                            </div>
+
+                            <div className="p-4 px-10 whitespace-pre-wrap overflow-y-auto">
+                                {/* Only the content inside this div will scroll */}
+                                {selectedList.list_description}
+                            </div>
+                        </div>
+
+                    </div>
+                )}
             </div>
 
 
 
 
-        </div>
+        </div >
     )
 };
 

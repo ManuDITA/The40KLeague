@@ -1,5 +1,5 @@
 export interface Player{
-    player_id: number;
+    player_id: number | undefined;
     player_nickname: string;
     player_age?: number;
     player_email?: string;

@@ -27,8 +27,21 @@ export default {
         veryDarkBlue: 'hsl(233, 12%, 13%)',
         veryPaleRed: 'hsl(13, 100%, 96%)',
         veryLightGray: 'hsl(0, 0%, 98%)',
-        customBlue: 'rgb(20, 48, 79)',
-        customRed: 'rgb(194, 63, 46)'
+        customRed: 'rgb(194, 63, 46)',
+
+        green40k: '#105C75',
+        green40klight: '#b7e6f5',
+        green40klighter: '#DBF2FA',
+        gold40k: '#A37E2C',
+        white40k: '#ffffff',
+        black40k: '#272727',
+        black40klight: '#707070',
+        black40klighter: '#b8b8b8',
+        red40k: '#8c1c13',
+        red40klight: '#C5261B'
+      },
+      fontFamily: {
+        'arial-black': ['Arial Black', 'Arial', 'sans-serif'],
       },
     },
   },

@@ -27,7 +27,7 @@ const Matches: FC<MatchesProps> = () => {
         <>
             {match != undefined &&
                 <>
-                    <div className='text-center text-5xl font-bold text-customBlue pt-10'>Match {match?.match_id}</div>
+                    <div className='text-center text-5xl font-bold text-green40k pt-10'>Match {match?.match_id}</div>
                     <div className='container grid grid-cols-3 grid-rows-2 justify-items-center mx-auto mb-16'>
                         <img className='row-span-2 justify-self-end' src='/player_icon.avif'></img>
                         <div className='row-span-1 self-end text-maxFont text-zinc-500 font-extrabold'>VS</div>
@@ -38,7 +38,7 @@ const Matches: FC<MatchesProps> = () => {
                         </div>
                     </div>
 
-                    <div className='boldBlue'>Listes:</div>
+                    <div className='green40k'>Listes:</div>
                     <div className="container flex flex-row items-center mx-auto px-10">
                         <div className='w-6/12 px-10'>
                             <div>Attacker</div>

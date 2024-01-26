@@ -4,6 +4,7 @@ import { Session } from '../../../../../../classes/Session';
 import { Link } from 'react-router-dom';
 import { TournamentClass } from '../../../../../../classes/TournamentClass';
 import apiPaths from '../../../../../../apiList';
+import TournamentBanner from '../../../Banner/TournamentBanner';
 
 interface TournamentsProps { }
 
@@ -27,13 +28,10 @@ const Tournaments: FC<TournamentsProps> = () => {
     }, []);
 
     return (
-        <div>
+        <div className='pt-10'>
+            <div className='green40k'>Tournaments</div>
             {tournaments.map((tournament) => (
-                <div key={tournament.tournament_id}>
-                    <h3>{tournament.tournament_id}</h3>
-                    {/* Render other tournament details as needed */}
-                    <Link to={`/tournament/${tournament.tournament_id}`}>View Details</Link>
-                </div>
+                <TournamentBanner key={tournament.tournament_id} tournament={tournament}/>
             ))}
         </div>
     );

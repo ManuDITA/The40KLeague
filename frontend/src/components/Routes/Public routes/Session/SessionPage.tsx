@@ -65,10 +65,10 @@ const SessionPage: FC<SessionPageProps> = () => {
     <>
       {session == undefined ? (
 
-        <div className='boldBlue my-5'>LOADING</div>) : (
+        <div className='green40k my-5'>LOADING</div>) : (
         <>
           <div className="container flex flex-col items-center mx-auto">
-            <div className='boldBlue my-2'>
+            <div className='green40k my-2'>
               {session?.is_session_active === 1 ? (
                 <div>
                   <span>{session?.tournament_id.toUpperCase()} - {session?.session_id.toUpperCase()} - EN COURS</span>
@@ -82,11 +82,19 @@ const SessionPage: FC<SessionPageProps> = () => {
                 (
                   <div>{session?.tournament_id.toUpperCase()} - {session?.session_id.toUpperCase()} - TERMINÉE</div>)}
             </div>
-            <img src={session?.session_image_location} className='w-full h-80 object-cover'></img>
+            <img
+              src={session?.session_image_location || "/factions_backgrounds/Aeldari.png"}
+              onError={({ currentTarget }) => {
+                console.log(currentTarget)
+                currentTarget.onerror = null; // prevents looping
+                currentTarget.src="/factions_backgrounds/Aeldari.png";
+              }}
+              className='w-full h-80 object-cover'
+            />
             <div className='sessionName'> {session?.session_name} </div>
           </div>
 
-          <div className='boldBlue'>
+          <div className='green40k'>
             DERNIERS RÉSULTATS :
           </div>
           <div className='flex flex-row justify-start overflow-scroll xl:justify-center xl:overflow-visible xl:flex-wrap overflow-y-hidden'>
@@ -115,7 +123,7 @@ const SessionPage: FC<SessionPageProps> = () => {
             </Link>
           </div>
 
-          <div className='boldBlue'>CLASSEMENT</div>
+          <div className='green40k'>CLASSEMENT</div>
           <div className='myTableContainer'>
             <table>
               <thead>

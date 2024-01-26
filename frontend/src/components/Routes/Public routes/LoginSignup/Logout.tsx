@@ -4,7 +4,7 @@ import './login.css'
 const Logout = () => {
     
     return (
-        <div className="center-screen boldBlue">You have been logged out</div>
+        <div className="center-screen green40k">You have been logged out</div>
     )
 }
 

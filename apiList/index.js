@@ -14,7 +14,10 @@ const apiPaths = {
     acceptMatch: '/acceptMatch',
     refuseMatch: '/refuseMatch',
     insertScore: '/insertScore',
-    getMatch: '/match'
+    getMatch: '/match',
+
+    tournamentSubscription: '/tournamentSubscription',
+    enrollTournament: '/enrollTournament'
   
 
   }

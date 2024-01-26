@@ -76,7 +76,14 @@ function Banner(prop: any) {
     //set is_match_played to 1
     const requestBody = {
       match_id: match?.match_id,
+      tournament_id: match?.tournament_id,
+      player1_id: match?.player1_id,
+      player2_id: match?.player2_id,
+      player1_score: match?.player1_score,
+      player2_score: match?.player2_score
     };
+
+    console.log(requestBody)
 
     console.log('fetching ' + apiPaths.matchesAPIEndpoint + apiPaths.acceptMatch)
     await fetch(apiPaths.matchesAPIEndpoint + apiPaths.acceptMatch, {

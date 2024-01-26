@@ -48,7 +48,7 @@ const NavBar: FC<NavBarProps> = () => {
   };
 
   return (
-    <nav className="bg-customBlue text-white z-50 xl:left-0 fixed xl:h-full xl:overflow-y-hidden xl:w-24 w-full bottom-0">
+    <nav className="bg-green40k text-white z-50 xl:left-0 fixed xl:h-full xl:overflow-y-hidden xl:w-24 w-full bottom-0">
       <div className="flex xl:flex-col xl:items-center justify-between xl:h-full xl:overflow-hidden flex-row">
         <Link to={'/'} className="w-20 hidden font-bold xl:flex xl:flex-col justify-evenly h-1/5">
           <img src={pageLogo} alt="logo" className="w-24" />
@@ -83,6 +83,13 @@ const NavBar: FC<NavBarProps> = () => {
             </div>
             <span className="font-light text-sm hidden xl:inline">Map</span>
           </Link>
+
+          <button onClick={() => customSignout()} className='hover:underline hover:underline-offset-8 flex flex-col py-4 items-center'>
+            <div className='text-6xl xl:text-3xl flex items-center'>
+              <MdWorkspacePremium />
+            </div>
+            <span className="font-light text-sm">Logout</span>
+          </button>
         </div>
 
 

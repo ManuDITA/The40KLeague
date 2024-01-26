@@ -1,18 +1,18 @@
 import React, { FC, useContext, useState } from 'react';
 import { Amplify } from 'aws-amplify';
 import awsExports from '../../../../aws-exports';
-import '../../../../App.css'
 import { Auth } from 'aws-amplify';
 import { useNavigate } from 'react-router-dom';
-import { isUserAuthenticatedContext } from '../../../../App';
+import { CognitoUserContext, isUserAuthenticatedContext } from '../../../../App';
 import apiPaths from '../../../../../../apiList';
 import { CognitoUser } from '../../../../../../classes/CognitoUser';
 
 const LoginSignup: FC = () => {
   const navigate = useNavigate();
   const { isUserAuthenticated, setIsUserAuthenticated } = useContext(isUserAuthenticatedContext);
+  const { cognitoUser, setCognitoUser } = useContext(CognitoUserContext)
 
-  const [cognitoUser, setCognitoUser] = useState<CognitoUser>({
+  const [internalCognitoUser, setInternalCognitoUser] = useState<CognitoUser>({
     username: '',
     password: '',
     email: '',
@@ -29,7 +29,7 @@ const LoginSignup: FC = () => {
   let tokenForApiRequest = '';
 
   const changeCognitoUserParams = (key: string, value: string) => {
-    setCognitoUser((prevUser) => ({
+    setInternalCognitoUser((prevUser) => ({
       ...prevUser,
       [key]: value,
     }));
@@ -37,12 +37,12 @@ const LoginSignup: FC = () => {
 
   const handleLogin = async () => {
     try {
-      const user = await Auth.signIn(cognitoUser.username, cognitoUser.password);
+      const user = await Auth.signIn(internalCognitoUser.username, internalCognitoUser.password);
       console.log('User signed in:', user);
       // Handle successful login (update context, navigate, etc.)
       setIsUserAuthenticated(true);
-      console.log((await Auth.currentSession()).getIdToken().getJwtToken())
-      //navigate('/dashboard');
+      setCognitoUser(user)
+      navigate('/dashboard');
 
     } catch (error) {
       console.error('Error signing in:', error);
@@ -85,10 +85,10 @@ const LoginSignup: FC = () => {
 
   const handleConfirmSignUp = async () => {
     try {
-      await Auth.confirmSignUp(cognitoUser.username, confirmationCode);
+      await Auth.confirmSignUp(internalCognitoUser.username, confirmationCode);
       console.log('User confirmed');
       //now we can add the user to the player database
-      registerUserToDatabase(cognitoUser);
+      registerUserToDatabase(internalCognitoUser);
       handleLogin()
     } catch (error) {
       console.error('Error confirming sign up:', error);
@@ -99,13 +99,13 @@ const LoginSignup: FC = () => {
   const handleSignUp = async () => {
     try {
       const user = await Auth.signUp({
-        username: cognitoUser.username,
-        password: cognitoUser.password,
+        username: internalCognitoUser.username,
+        password: internalCognitoUser.password,
         attributes: {
-          email: cognitoUser.email,
-          phone_number: cognitoUser.phone_number,
-          name: cognitoUser.name,
-          birthdate: cognitoUser.birthdate
+          email: internalCognitoUser.email,
+          phone_number: internalCognitoUser.phone_number,
+          name: internalCognitoUser.name,
+          birthdate: internalCognitoUser.birthdate
         },
       });
 
@@ -138,7 +138,7 @@ const LoginSignup: FC = () => {
 
 
   return (
-      <div className="login-signup-container">
+      <div className="mx-80 my-24 px-16 py-10 border-2 rounded-3xl border-black">
         {/* Tabs */}
         {isUserRegistered === false &&
           <div className="tabs">
@@ -169,9 +169,9 @@ const LoginSignup: FC = () => {
 
             <div>
               <label>Username:</label>
-              <input type="text" value={cognitoUser.username} onChange={(e) => changeCognitoUserParams('username', e.target.value)} />
+              <input type="text" value={internalCognitoUser.username} onChange={(e) => changeCognitoUserParams('username', e.target.value)} />
               <label>Password:</label>
-              <input type="password" value={cognitoUser.password} onChange={(e) => changeCognitoUserParams('password', e.target.value)} />
+              <input type="password" value={internalCognitoUser.password} onChange={(e) => changeCognitoUserParams('password', e.target.value)} />
             </div>
             <div className='container flex flex-row mx-auto my-3'>
               <button className='btn px-10' onClick={handleLogin}>Login</button>
@@ -190,42 +190,42 @@ const LoginSignup: FC = () => {
                 <input
                   type="text"
                   required
-                  value={cognitoUser.username}
+                  value={internalCognitoUser.username}
                   onChange={(e) => changeCognitoUserParams('username', e.target.value)}
                 />
                 <label>Password:</label>
                 <input
                   type="password"
                   required
-                  value={cognitoUser.password}
+                  value={internalCognitoUser.password}
                   onChange={(e) => changeCognitoUserParams('password', e.target.value)}
                 />
                 <label>Email:</label>
                 <input
                   type="text"
                   required
-                  value={cognitoUser.email}
+                  value={internalCognitoUser.email}
                   onChange={(e) => changeCognitoUserParams('email', e.target.value)}
                 />
                 <label>Phone Number:</label>
                 <input
                   type="text"
                   required
-                  value={cognitoUser.phone_number}
+                  value={internalCognitoUser.phone_number}
                   onChange={(e) => changeCognitoUserParams('phone_number', e.target.value)}
                 />
                 <label>Name and Surname:</label>
                 <input
                   type="text"
                   required
-                  value={cognitoUser.name}
+                  value={internalCognitoUser.name}
                   onChange={(e) => changeCognitoUserParams('name', e.target.value)}
                 />
                 <label>Birthdate:</label>
                 <input
                   type="date"
                   required
-                  value={cognitoUser.birthdate}
+                  value={internalCognitoUser.birthdate}
                   onChange={(e) => changeCognitoUserParams('birthdate', e.target.value)}
                 />
               </div>
@@ -239,12 +239,12 @@ const LoginSignup: FC = () => {
           {isUserConfirmed === false && (
             <>
               <h2>Confirm Sign Up</h2>
-              <div>A confirmation code has been sent to: {cognitoUser.email}</div>
+              <div>A confirmation code has been sent to: {internalCognitoUser.email}</div>
               <br></br>
               <label>Confirmation Code:</label>
               <input type="text" value={confirmationCode} onChange={(e) => setConfirmationCode(e.target.value)} />
               <button className='btn my-2' onClick={handleConfirmSignUp}>Confirm Sign Up</button>
-              <button className='btn' onClick={() => Auth.resendSignUp(cognitoUser.username)}>Resend Sign Up</button>
+              <button className='btn' onClick={() => Auth.resendSignUp(internalCognitoUser.username)}>Resend Sign Up</button>
             </>
           )}
 

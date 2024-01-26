@@ -39,9 +39,9 @@ const UserTopDiv = (props) => {
                 </Link>
             }
             {isUserAuthenticated == false &&
-                <div className="top-0 pr-10 right-0 fixed flex flex-row items-center z-50 bg-red-200">
+                <Link to={'login'} className="top-0 pr-10 right-0 fixed flex flex-row items-center z-50 bg-red-200">
                     Login
-                </div>}
+                </Link>}
         </>
     )
 

@@ -36,6 +36,7 @@ Amplify.configure({
     region: awsExports.REGION,
     userPoolId: awsExports.USER_POOL_ID,
     userPoolWebClientId: awsExports.USER_POOL_CLIENT_ID,
+    aws_cognito_client_secret: awsExports.CLIENT_SECRET,
   },
 });
 
@@ -95,7 +96,7 @@ function App() {
               <Route path='/tournament/:tournamentID' element={<Tournament />}></Route>
               <Route path="/tournament/:tournamentID/:sessionID" element={<SessionPage />}></Route>
               <Route path="/contacts" element={<Contacts />}></Route>
-              <Route path="/loginsignup" element={<LoginSignup />}></Route>
+              <Route path="/login" element={<LoginSignup />}></Route>
               <Route path="/logout" element={<Logout />}></Route>
               <Route path="/profile/:nickname" element={<Profile />}></Route>
               <Route path="/match/:match_id" element={<Matches />}></Route>
@@ -108,7 +109,6 @@ function App() {
             </Routes>
           </div>
 
-          <Footer></Footer>
         </isUserAuthenticatedContext.Provider>
       </CognitoUserContext.Provider>
     </>

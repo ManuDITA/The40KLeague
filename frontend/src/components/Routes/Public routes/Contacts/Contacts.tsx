@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'; // Add this import statement for React
 import User from '../../Private routes/user';
 import { Auth } from 'aws-amplify'
-import Trapezoid from '../../../Trapezoid/trapezoid';
 import UserTopDiv from '../../../UserTopDiv/userTopDiv';
+import { MyPicker } from '../../../ElementPicker/elementPicker';
 
 function Contacts() {
 
@@ -30,10 +30,22 @@ function Contacts() {
     })
   }
 
+  const years = new Array(5).fill(1).map((_, index) => ({
+    value: index + 2022,
+    text: `${index + 2022}年`,
+  }));
+
+  const handleYearChange = (selected) => {
+    console.log('Selected Year:', selected);
+  };
+
   return (
     <div>
-      <Trapezoid></Trapezoid>
-      <UserTopDiv></UserTopDiv>
+      <div>    <div>
+        <h1>Date Selector</h1>
+        <MyPicker/>
+      </div>
+      </div>
     </div>
   );
 }
